@@ -3,9 +3,9 @@
 
 
 /* TEAM */
-  Owner: Adrian Artiles
-  Site: http://AdrianArtiles.com
-  Twitter: @AdrianArtiles
+  Owner: Jim Van Fleet
+  Site: http://www.jimvanfleet.com
+  Twitter: @bigfleet
 
   UX Designer: Adrian Artiles
   Site: http://AdrianArtiles.com
