@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NFJS Review: Rick Hightower on Test Driven Development for the Web - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Canoo / HttpUnit / JWebUnit User Interface JUnit / Cactus / StrutsTestCase Controllers / Managers JUnit / MockObjects Business Logic DBUnit test &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bigfleet.github.io/jvf/blog/2004/06/27/nfjs-review-rick-hightower-on-test-driven-development-for-the-web/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="NFJS Review: Rick Hightower on Test Driven Development for the Web" />
+  <meta name="og:description" content="Canoo / HttpUnit / JWebUnit User Interface JUnit / Cactus / StrutsTestCase Controllers / Managers JUnit / MockObjects Business Logic DBUnit test &hellip;" />
+  <meta name="og:url" content="http://bigfleet.github.io/jvf/blog/2004/06/27/nfjs-review-rick-hightower-on-test-driven-development-for-the-web/"/>
+  <meta name="url" content="http://bigfleet.github.io/jvf/blog/2004/06/27/nfjs-review-rick-hightower-on-test-driven-development-for-the-web/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:bigfleet.github.io/jvf" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">NFJS Review: Rick Hightower on Test Driven Development for the Web</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-06-27T00:00:00-04:00" pubdate data-updated="true">Jun 27<span>th</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><table align="right" border="2" cellpadding="2" cellspacing="2">
+<tr><td>Canoo / HttpUnit / JWebUnit </td></tr>
+<tr><td>User Interface </td></tr>
+<tr><td>JUnit / Cactus / StrutsTestCase </td></tr>
+<tr><td>Controllers / Managers </td></tr>
+<tr><td>JUnit / MockObjects </td></tr>
+<tr><td>Business Logic </td></tr>
+<tr><td>DBUnit test case </td></tr>
+<tr><td>Persistence Tier </td></tr>
+<tr><td>DBUnit preparation</td></tr>
+</table>
+
+<p>The central idea of the presentation was called the &#8220;Web Application Test Sandwich&#8221;.  It looks something like what you&#8217;ll see on the right.  The idea was to present the type of testing each product can perform, and which products compete with and compliment each other in which ways.  It was an excellent primer to have the lightning bolt hit during Dave Thomas&#8217; <a href="http://devblog.jimvanfleet.com/archives/000036.html">Mock Objects</a> talk right afterwards.</p>
+
+<h2>JUnit</h2>
+
+<p>First we talked about JUnit, where I didn&#8217;t really learn anything new.  If you don&#8217;t know about JUnit, Rick&#8217;s recommendation is Kent Beck&#8217;s <a href="http://www.amazon.com/exec/obidos/ASIN/0321146530/jimvanfleetco-20?creative=125581&#38;camp=2321&#38;link_code=as1">Test Driven Development By Example</a>.</p>
+
+<h2>DBUnit</h2>
+
+<p>Next up was DBUnit, a product I will definitely be adding to my toolkit.  DBUnit is designed to be a unit testing tool for <strong>using</strong> databases.  As you might imagine, it handles some very interesting cases gracefully.  You can use <span class="caps">XML</span> files to describe a pre-populated universe for your domain.  You can write these yourself or have DBUnit take an <span class="caps">XML</span> snapshot of a currently existing DB.  You can also just use the test database itself, if you&#8217;d rather avoid <span class="caps">XML</span> altogether.  The flexibility is appreciated.</p>
+
+<p>My Spring+Hibernate experience has moved me towards appreciation of the <span class="caps">DAO</span>, which is an extremely easy pattern to test using DBUnit.  In addition, to speed the running of unit tests, DBUnit can supply an ant command to prepare a test dataset for use during your unit tests.  This way, the <span class="inlineCode"><span class="caps">INSERT</span></span> operations only happen once.</p>
+
+<p>In terms of operations, DBUnit acts much as you&#8217;d expect.  It&#8217;s a thin extension of JUnit;  you have to have your test cases extend a new base class, but most everything else behaves the same.</p>
+
+<h2>Cactus</h2>
+
+<p>I went into the presentation not entirely sure of Cactus&#8217;s role in unit testing.  It seemed so complicated to set up, how could it possibly be a unit test?  Semantic quibbling aside, Cactus can be invaluable for certain projects, but I feel that I don&#8217;t need to use it.</p>
+
+<h4>Why use Cactus?</h4>
+
+<p>I would recommend that a project use Cactus if it depends heavily on it&#8217;s <span class="caps">J2EE</span> environs.  <span class="caps">JNDI</span> lookups, interoperations with <span class="inlineCode">ServletContext</span>, <span class="inlineCode">HttpServletRequest</span>, and <span class="inlineCode">HttpSession</span> objects, or whatever other features you might be using from your application server.  These elements are frequently difficult or impossible to mock, much less provide correct behavior for outside of the real, running environment.  You would know better than me if your project fits the bill.</p>
+
+<p>In my case, the Mock Objects approach is superior.  I can mock certain elements in the Sofia framework, and provide a mock controller in addition to a real controller.  Spring can configure the behavioral testing phase of my mock controller at runtime, and all the actual business code is in the abstract superclass that the controllers share.  Sofia is mature enough that I&#8217;m satisfied that it will behave correctly in nearly all circumstances.  As a result, I focus on whether my code is interacting with the Sofia constructs appropriately.  I don&#8217;t need Tomcat running to interact with any persistence layer;  both memory-based and <span class="caps">RDBMS</span>-based persistence layers will run fine without it, thanks to Spring.<p>
+
+<h2>StrutsTestCase</h2>
+
+<p>No comment, though it looks nice for the Struts users.  Obviously, you would have had to work with Struts to know <strong>how</strong> nice.</p>
+
+<h2>HttpUnit</h2>
+
+<p>HttpUnit is the functional testing slice of the sandwich, the top piece of bread.  HttpUnit and its extension JWebUnit act as modified web browsers that you can command via the Java language.  They both contain advanced capabilities in terms of parsing the responses and providing you with access to the data that has fulfilled your request.</p>
+
+<p>I don&#8217;t live in a world where functional testing is going to be fully replaced by a machine.  My clients are going to want to pound the keys themselves.  As a result, I don&#8217;t know exactly how much time I want to spend testing on this level.  Customers are so picky about their <span class="caps">GUI</span>, sometimes in completely braindead ways.  I don&#8217;t want to be even more frustrated because I have to go back and change a nifty test implementation for something I don&#8217;t even like in the first place.  But what does that have to do with HttpUnit?  :-)</p>
+
+<p>In terms of technology, I&#8217;d likely evaluate both HttpUnit and JWebUnit.  The latter is an extension of the former, although apparently it is not a superset.  Rumor has it that there are some advanced features of HttpUnit that are not present in JWebUnit.  So, when it comes time, I&#8217;ll evaluate further.  The technology at this level, however, will play a role.  Its size is yet to be determined.</p>
+
+<h2>The Presenter</h2>
+
+<p>I can&#8217;t remember which blog I saw that gassed Rick, I think maybe it was Ted Neward&#8217;s, but he wasn&#8217;t wrong.  Rick obviously has a large body of knowledge, and he claims that his group&#8217;s specialty is &#8220;saving your project&#8217;s ass,&#8221; so he&#8217;s got to be ready to put his fees where his mouth is on that score.  Rick continued the high level of speaker quality, in my opinion.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-06-27T00:00:00-04:00" pubdate data-updated="true">Jun 27<span>th</span>, 2004</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2004/06/27/nfjs-review-bruce-tate-on-java-persistence/" title="Previous Post: NFJS Review:  Bruce Tate on Java Persistence">&laquo; NFJS Review:  Bruce Tate on Java Persistence</a>
+    
+    
+      <a class="pull-right" href="/blog/2004/06/29/back-from-beyond-the-grave/" title="Next Post: Back From Beyond the Grave">Back From Beyond the Grave &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/04/old-days/">Old Days</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/02/08/336-hours/">336 Hours</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

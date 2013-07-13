@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>FreeBSD Workstation set up - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Before We Begin The point of this lesson is to get you on your feet in an X environment; the basis of any workstation. You&#8217;ll get an &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bigfleet.github.io/jvf/blog/2005/12/13/freebsd-workstation-set-up/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="FreeBSD Workstation set up" />
+  <meta name="og:description" content="Before We Begin The point of this lesson is to get you on your feet in an X environment; the basis of any workstation. You&#8217;ll get an &hellip;" />
+  <meta name="og:url" content="http://bigfleet.github.io/jvf/blog/2005/12/13/freebsd-workstation-set-up/"/>
+  <meta name="url" content="http://bigfleet.github.io/jvf/blog/2005/12/13/freebsd-workstation-set-up/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:bigfleet.github.io/jvf" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">FreeBSD Workstation Set Up</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2005-12-13T00:00:00-05:00" pubdate data-updated="true">Dec 13<span>th</span>, 2005</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Before We Begin</h2>
+
+
+	<p>The point of this lesson is to get you on your feet in an X environment; the basis of any workstation.  You&#8217;ll get an introduction to the ports system and see what it&#8217;s like to use it.  I include a couple of tips for ordering your port installation and a few examples of ports that I&#8217;ve installed at the end.</p>
+
+
+	<h2> Ports, Explained</h2>
+
+
+	<p>In the <a href="http//blah/">last lesson</a>, we covered installing the ports system using <span class="caps">CVSUP</span>.  Ports is the package management system for FreeBSD.  It&#8217;s highly dependent on source code compilation, so it&#8217;s not for the impatient.  However, the ports system has high standard for a &#8220;non-broken&#8221; port, and the maintainers of any given port are given continuous feedback for circumstances that &#8220;break&#8221; the port.  As a result, you can use ports without being that comfortable with many of the major compilation issues and strategies;  odds are that it will <em>just work</em>.</p>
+
+
+	<h2> Using the ports system.</h2>
+
+
+	<p>The first step I took with my newly installed system was to log in as root and&#8230;</p>
+
+
+<code>
+<pre>
+# cd /usr/ports/x11-servers/xorg-server/
+# make install clean
+</pre>
+</code>
+
+	<p>That&#8217;s it.  Let that run, and eventually you will have an X server running.  The ports system itself will walk the necessary dependency chains, installing other ports as needed.</p>
+
+
+	<h2> Interlude: configuration and <code>rehash</code></h2>
+
+
+	<p>After the above command has completed, issue the <code>rehash</code> command.  Essentially, this tells FreeBSD to go back and re-evaluate your <span class="caps">PATH</span>, giving you access to any newly installed programs.  In this case, you&#8217;ve picked up <code>xorgconfig</code>, which you should now run.</p>
+
+
+	<h2> Getting a bit tricky</h2>
+
+
+Ports evaluate dependency chains as best it can, but it&#8217;s not a perfect system.  For example, if we were to&#8230;
+<code><pre>
+# cd /usr/ports/x11-wm/gnome2
+</pre></code>
+we could <code>make install clean</code> immediately, but let&#8217;s say we were going to sleep after issuing that command.  During the middle of the night, this command would end up blocking on configuration choices for the <code>ghostscript</code> port.
+
+	<p>So you don&#8217;t wake up to yummy Gnome!  The answer, in this case, is to install the <code>print/ghostscript-gpl</code> port first (which doesn&#8217;t take very long) then start gnome.</p>
+
+
+	<p>(KDE, by the way, blocks on at least a half-dozen dependencies. <code>artswrapper, postgres-client (?!?), openslp, kdegraphics, kdemultimedia, kdepim, and boost-python</code>)</p>
+
+
+	<p>There are ways to have these preferences taken into account without having them come up directly in the <code>make</code> process, but I&#8217;m still experimenting with the alternatives and trying to figure out how some of the tricky stuff works.  I&#8217;ll be happy to leave an update when I crack the case.</p>
+
+
+	<h2>Recommended Ports</h2>
+
+
+	<ul>
+	<li>Firefox (www/firefox)</li>
+		<li>OpenOffice.Org v.2 (editors/openoffice-2.0)
+ Gnome (x11-wm/gnome2)
+(although gnome2-lite looks interesting&#8230;)</li>
+		<li>lighttpd (www/lighttpd)</li>
+		<li>Ruby (devel/ruby18)</li>
+		<li>Subversion (devel/subversion)</li>
+		<li>tsclient (net/tsclient) This program handles <span class="caps">RDP</span> connections to Windows machines and <span class="caps">VNC</span> connections to others.  Beats both gdesktop and kdesktop.</li>
+		<li>Trac (www/trac)</li>
+		<li>Gimp (graphics/gimp)</li>
+		<li>Gaim (net-im/gaim)</li>
+	</ul>
+
+
+	<h2>What&#8217;s Next?</h2>
+
+
+	<p>The Java ports.  FreeBSD&#8217;s support for Java might seem intimidating, but it&#8217;s not so bad, as long as you can live with 1.4.  You can still run Eclipse, and a lot of Java programs on the 1.4 <span class="caps">JDK</span>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2005-12-13T00:00:00-05:00" pubdate data-updated="true">Dec 13<span>th</span>, 2005</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2005/12/12/installing-freebsd-stable/" title="Previous Post: Installing FreeBSD-STABLE">&laquo; Installing FreeBSD-STABLE</a>
+    
+    
+      <a class="pull-right" href="/blog/2005/12/14/what-a-geek/" title="Next Post: What A Geek!">What A Geek! &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/04/old-days/">Old Days</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/02/08/336-hours/">336 Hours</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

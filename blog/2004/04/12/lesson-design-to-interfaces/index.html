@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Lesson: Design to Interfaces - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="The Set Up
+In reviewing the Sofia User&#8217;s Guide, I stumble upon their facility to implement a site map. Their site map is an XML file that can &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bigfleet.github.io/jvf/blog/2004/04/12/lesson-design-to-interfaces/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="Lesson: Design to Interfaces" />
+  <meta name="og:description" content="The Set Up
+In reviewing the Sofia User&#8217;s Guide, I stumble upon their facility to implement a site map. Their site map is an XML file that can &hellip;" />
+  <meta name="og:url" content="http://bigfleet.github.io/jvf/blog/2004/04/12/lesson-design-to-interfaces/"/>
+  <meta name="url" content="http://bigfleet.github.io/jvf/blog/2004/04/12/lesson-design-to-interfaces/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:bigfleet.github.io/jvf" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">Lesson: Design to Interfaces</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-04-12T00:00:00-04:00" pubdate data-updated="true">Apr 12<span>th</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><iframe style="float:right" marginwidth="0" marginheight="0"  scrolling="no" frameborder="2" width="120" height="150" src="http://rcm.amazon.com/e/cm?o=1&#38;l=as1&#38;f=ifr&#38;t=jimvanfleetco-20&#38;dev-t=D68HUNXKLHS4J&#38;p=6&#38;asins=0764543857&#38;bg1=ffffff&#38;fc1=000000&#38;lc1=6633ff&#38;lt1=_blank"><map NAME="boxmap-p6"><area SHAPE="RECT" COORDS="1, 140, 83, 150" HREF="http://rcm.amazon.com/e/cm/privacy-policy.html?o=1" ><area COORDS="0,0,10000,10000" HREF="http://www.amazon.com/exec/obidos/redirect-home/jimvanfleetco-20" ></map><img src="http://rcm-images.amazon.com/images/G/01/rcm/120x150.gif" width="120" height="150" border="0" usemap="#boxmap-p6" alt="Shop at Amazon.com"></iframe>
+
+<h2>The Set Up</h2>
+<p>In reviewing the <a href="http://www.salmonllc.com/website/Jsp/vanity/bin/UserGuide.pdf">Sofia User&#8217;s Guide</a>, I stumble upon their facility to implement a site map.  Their site map is an <span class="caps">XML</span> file that can be used to edit page locations and preferences at runtime without a re-compile.  Their <span class="caps">GUI</span> tools have great support for it, and it gets rid of all the mis-typed <span class="caps">URL</span>&#8217;s and saves some time.</p>
+
+<h2>What I Should Have Done</h2>
+<p>
+<ol>
+<li>Go to the vending machines and get some <a href="http://www.mountaindew.com/code_red/index.php">Code Red</a></li>
+<li>Think about what my real needs are for the linkage.  I don&#8217;t need every last little bit of the Sofia capabilities, I just want a way to get &#8220;Dreamweaver-style&#8221; link assurances within Java code.  In addition, I have my help files laid out in such a way that I can get those <span class="caps">URL</span>&#8217;s for free for any given page name&#8212;it&#8217;d be nice to include that too, with a little Javascript to make it pop up in a new window.</li>
+<li>Design an interface with appropriate methods for the above&#8212;like <pre>getUrl(String key)</pre> and <pre>getHelpUrl(String url)</pre></li>
+<li>Implement the interface with a default implementation, passing those methods along to the appropriate Sofia site map calls.</li>
+<li>Set up a separate, constants class to represent keys for the various pages</li>
+</ol>
+</p>
+<h2>What I Did Do</h2>
+<p>
+<ol>
+<li>Went to the vending machines and got some <a href="http://www.mountaindew.com/code_red/index.php">Code Red</a></li>
+<li>While sipping, put the calls to the site map functionality into the controller.  This went on for weeks as I added more keys, and I refactored the code a bit in the middle.  Since I needed the <span class="caps">URL</span> in some places (to append a query string before a redirect), and ordered a full redirect in others, I had several different methods of interacting with the site maps calls.</li>
+</ol>
+</p>
+<h2>The Pinch</h2>
+<p>
+During development, I had noticed occassional spurts of</p> <pre>/opgi360/Jsp/admin/mail/participant.notification.jsp</pre> <p>becoming</p> <pre>/ant.ntofication.jsp</pre><p> but since I was constantly editing the site map, and never had a major problem with whatever pages I was testing at the time, I chalked it up to <a href="http://www.mdx.ac.uk/www/study/glocom.htm#gremlin">computer gremlins</a> and ignored it.</p>
+<p>Obviously, the gremlins infested the deployed system.  Major pages were unreachable.</p>
+<p>Looking for a solution, I see that Sofia&#8217;s site map functionality is a pretty skeletal implementation over a <a href="http://java.sun.com/webservices/docs/ea2/tutorial/doc/JAXPIntro4.html"><span class="caps">SAX</span> parser</a>.  I don&#8217;t know a ton about <span class="caps">XML</span>, but I do know, thanks to a workshop at <a href="http://www.sigcse.org"><span class="caps">SIGCSE</span></a> that <span class="caps">SAX</span> parsing is the one I&#8217;m least likely to understand or enjoy working with, and that it&#8217;s a part of the 1.4 library.
+</p>
+<p>In other words, I have little to no idea where to look for the bugs, and probably wouldn&#8217;t recognize them when or if I saw them.  I could try to move the site map over to using a <a href="http://java.sun.com/webservices/docs/1.0/tutorial/doc/JAXPIntro5.html"><span class="caps">DOM</span></a> parser, which I can understand more easily.  But how on earth could I know how long that would take?  And, the biggest test, what value does it add for the people using the system?</p>
+<p>So, the solution is: rip out the site map functionality, replace the Dreamweaver links with something a little more hard-coded, and figure out something to do with the Java linkage.</p>
+
+<h2>What Should Have Happened</h2>
+
+<p>
+<ol>
+<li>Grab a drink</li>
+<li>Reimplement the interface, only this time the &#8220;keys&#8221; are constants that look like page names and represent the actual page <span class="caps">URL</span>&#8217;s.</li>
+<li>Rewrite the implementation&#8217;s methods to only operate on the &#8220;keys&#8221; instead of doing anything with the site map.</li>
+<li>Check out the Dreamweaver pages, searching for any Sofia links that could be replaced with regular links, and hard-coding the <span class="caps">URL</span>&#8217;s for the ones that could not.</li>
+</ol>
+</p>
+<p>Estimated time:  a half day.</p>
+
+<h2>What Did Happen</h2>
+<p>
+<ol>
+<li>Wake up early to have Easter Sunday</li>
+<li>Check out the Dreamweaver pages, searching for any Sofia links that could be replaced with regular links, and hard-coding the <span class="caps">URL</span>&#8217;s for the ones that could not.</li>
+<li>Go to the class where I&#8217;ve been storing the keys and comment everything out.</li>
+<li>Freak out when I see how many times I link to another page in the hard code.</li>
+<li>Do a primitive separation of the interface and implementation.</li>
+<li>Go through the code, fixing compilation errors</li>
+<li>Stumble back and forth over whether to use an interface or an abstract class.  (Conclusion: the keys are present for both, but have different semantics in each&#8212;I went the abstract class route).  This decision ended up getting made at about 11PM.</li>
+<li>Go to sleep feeling very tired, and not that good.</li>
+</ol>
+</p>
+<p>Estimated time: a day and a half, on a holiday</p>
+
+<h2>Conclusion</h2>
+<p>Whenever I find an exciting new feature, it&#8217;s natural to want to dig in and start using it immediately.  I need to stop doing it with code I depend on, and start doing that with <a href="http://www.drjava.org">DrJava</a>&#8217;s interaction pane (which I now have set up in <a href="http://www.eclipse.org/">Eclipse</a> as a plugin).</p>
+
+<p>When you design away from the implementations and class instances, you end up with a nifty little <a href="http://www.martinfowler.com/eaaCatalog/serviceLayer.html">Service Layer</a> for whatever service you&#8217;re using.  (It doesn&#8217;t have to be a domain model, like in the picture.)  And, when you find out you need to pull everything apart, you aren&#8217;t ripping your code into pieces.</p>
+
+<p>That&#8217;s today&#8217;s tip, from me to you</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-04-12T00:00:00-04:00" pubdate data-updated="true">Apr 12<span>th</span>, 2004</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2004/04/11/the-saddest-thing/" title="Previous Post: The Saddest Thing...">&laquo; The Saddest Thing...</a>
+    
+    
+      <a class="pull-right" href="/blog/2004/04/13/discussion-logging/" title="Next Post: Discussion: Logging">Discussion: Logging &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/04/old-days/">Old Days</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/02/08/336-hours/">336 Hours</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

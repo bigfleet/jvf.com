@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>What in the Hyades? - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Step 1: There are some prerequisites for using Hyades, namelu the Eclipse Modeling Framework (EMF) and the XML Schema Infoset Model (XSD). Those are &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bigfleet.github.io/jvf/blog/2004/12/29/what-in-the-hyades/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="What in the Hyades?" />
+  <meta name="og:description" content="Step 1: There are some prerequisites for using Hyades, namelu the Eclipse Modeling Framework (EMF) and the XML Schema Infoset Model (XSD). Those are &hellip;" />
+  <meta name="og:url" content="http://bigfleet.github.io/jvf/blog/2004/12/29/what-in-the-hyades/"/>
+  <meta name="url" content="http://bigfleet.github.io/jvf/blog/2004/12/29/what-in-the-hyades/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:bigfleet.github.io/jvf" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">What in the Hyades?</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-12-29T00:00:00-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Step 1:</h3>
+
+
+	<p>There are some prerequisites for using Hyades, namelu the Eclipse Modeling Framework (EMF) and the <span class="caps">XML</span> Schema Infoset Model (XSD).  Those are both best installed using <strong>Help &gt; Software Updates &gt; Find And Install &gt; Find new features</strong>  As of this writing, (Eclipse 3.01) Eclipse lists one 2.01 plugin that includes both <span class="caps">XSD</span> and <span class="caps">EMF</span>.  Download that and then get started.</p>
+
+
+	<h3>Step 2:</h3>
+
+
+	<p>Get the Hyades files from the <a href="http://dev.eclipse.org/viewcvs/indextools.cgi/~checkout~/hyades-home/downloads/download.html">Download</a> page.  As of this writing, Hyades is on release 3.2.0.  It does appear that the project is about to get folded into another Eclipse initiative, but who knows how long these things will take?  Here&#8217;s what we have right now.</p>
+
+
+<pre>
+Hyades Runtime       hyades.runtime_3.2.0_20041221_1637.zip
+Hyades Examples     hyades.examples_3.2.0_20041221_1637.zip
+Hyades Component Test     hyades.test_3.2.0_20041221_1637.zip
+Hyades Data Collection Engine for Windows (NT, 2000, XP) Runtime
+</pre>
+
+	<h3>Step 3:</h3>
+
+
+	<p>Unzip all the Hyades runtime, examples, and component test archives to the base Eclipse install directory.  Remember <strong><span class="caps">NOT</span></strong> to extract them to the <em>plugins</em> directory, as the archives include elements destined for the <em>plugins</em> and <em>features</em> directories of Eclipse.</p>
+
+
+	<h4>Step 4:</h4>
+
+
+	<p>Fortunately for us all, the description of installing the Data Collection Agent is easy to follow and needs no amendment.  Go ahead and take care of this prerequisite first by following the <a href="http://dev.eclipse.org/viewcvs/indextools.cgi/~checkout~/org.eclipse.hyades.datacollection/collection/packaging_md/win_ia32/getting_started.html">installation instructions</a>. </p></p>
+
+
+	<h3>Step 5:</h3>
+
+
+	<p>My advice is to not go around to the different examples to figure out what&#8217;s going on.  Just start trying to get Tomcat up and running.  I use the <a href="http://www.sysdeo.com/eclipse/tomcatPlugin.html">Sysdeo Tomcat plugin</a>, which gives some very useful pointers on how to start up Tomcat within Eclipse.  If you are not currently running Tomcat within Eclipse, for god&#8217;s sake, quit this tutorial right now and install the Tomcat plugin.  It&#8217;s straightforward, but feel comfortable working with it before you take the next step.</p>
+
+
+	<h3>Step 5a:</h3>
+
+
+	<p>Get your web application up and running comfortably within it.  That portion may be somewhat less straightforward, but I believe in you!  One item to note, you should include as &#8220;external JARs&#8221; in your libraries the entries of <strong><span class="caps">TOMCAT</span>_HOME/common/lib</strong>  These <strong>will</strong> will be part of your running classpath.  You may even find this useful in getting your web application running, especially if your application is using libraries itself.</p>
+
+
+	<h3>Step 6:</h3>
+
+
+	<p>Start a Tomcat session using the <strong>Start Tomcat</strong> command.  Switch to the <strong>Debug</strong> perspective.  Right click on the running Tomcat application and select the <strong>Properties</strong> option.  Copy and paste this into your <a href="http://www.notetab.com;">favorite text editor</a> we&#8217;ll use it to help us configure the profiler.</p>
+
+
+	<p><strong><span class="caps">UPDATE</span></strong>:  You can also use the <em>Create A Launch Configuration</em> button inside of the <strong>Windows &gt; Preferences &gt; Tomcat</strong> menu.</p>
+
+
+	<h3>Step 7:</h3>
+
+
+	<p>Use the skills you learned from installing the Tomcat plugin to make the <strong>Profiling and Logging</strong> perspective show up, as well as the <strong>Profile</strong> button on the toolbar.  From the <strong>Profile</strong> button, select that option.  You should see a screen much like the picture below.  Click on <strong>Java Application &gt; New</strong> and you&#8217;ll have an opportunity to begin defining the Java project.</p>
+
+
+	<p><img src="http://devblog.jimvanfleet.com/imgs/hyades/step7.png" alt="" /></p>
+
+
+	<p>For the <strong>Project</strong> section, choose the project that you set up in Step 5.</p>
+
+
+	<p>For the Main class, you want <em>org.apache.catalina.startup.Bootstrap</em> for the Tomcat 5 varieties.  If something else is in your clipboard entry from Step 6, use that instead, but <a href="http://en.wikipedia.org/wiki/YMMV"><span class="caps">YMMV</span></a>.</p>
+
+
+	<h3>Step 8:</h3>
+
+
+	<p>Refer to the picture below.</p>
+
+
+	<p><img src="http://devblog.jimvanfleet.com/imgs/hyades/step8.png" alt="" /></p>
+
+
+	<p>For the program arguments, select everything that comes after the main class you used in Step 7.</p>
+
+
+	<p>For the VM arguments, use all the elements you passed in using the <strong>-D</strong> technique, this is everything after the Java invocation but before the classpath declaration.  Of course, your values will differ based on where you have installed Tomcat, but it should look somewhat similar to the picture.</p>
+
+
+	<h3>Step 9:</h3>
+
+
+	<p>Refer to the picture below.</p>
+
+
+	<p><img src="http://devblog.jimvanfleet.com/imgs/hyades/step9.png" alt="" /></p>
+
+
+	<p>Begin with the defaults, which include the Java standard libraries as your boot classpath and your own web application&#8217;s libraries (as defined by your project) as the user classpath.  Note that not all of these steps may be necessary if you followed the updated instructions above.</p>
+
+
+	<p>Add your <strong><span class="caps">TOMCAT</span>_HOME/bin/bootstrap.jar</strong> as the next entry after the defaults.</p>
+
+
+	<p>Add the libraries in <strong><span class="caps">TOMCAT</span>_HOME/server/lib/</strong> as the next entries.</p>
+
+
+	<p>Add the <strong><span class="caps">JAVA</span>_HOME/lib/tools.jar</strong> from your <span class="caps">JDK</span> so that Tomcat can compile your Java files.  (Note that this may not be necessary with Tomcat 5.5)</p>
+
+
+	<p>If you use Apache&#8217;s log4j project, you&#8217;ll likely end up with that jar in <strong><span class="caps">TOMCAT</span>_HOME/server/lib/</strong>.  As a result, you&#8217;ll have to provide some directory for the classpath that contains a <em>log4j.properties</em> file so that the log4j system can initialize itself appropriately.</p>
+
+
+	<h3>Step 10:</h3>
+
+
+	<p>Start it up!  (Make sure that you&#8217;re running the data collection service mentioned in Step 4.)</p>
+
+
+	<p>If you want to be gathering other data, you&#8217;ll want to visit the <strong>Profiling</strong> tab on the configuration menu that we&#8217;ve been working with.  Create a new profiling set and you&#8217;ll be in shape.</p>
+
+
+	<h1>Summary:</h1>
+
+
+	<p>I&#8217;m absolutely thrilled to have a profiler added to my toolkit, much less one that will be easily accessible from within my <span class="caps">IDE</span>.  Also, I strongly suspect that this product will be vastly improving in quality along with the rest of Eclipse as time passes.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-12-29T00:00:00-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2004</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2004/12/27/problems-with-log4j-eclipse-tomcat/" title="Previous Post: Problems with Log4j, Eclipse, Tomcat">&laquo; Problems with Log4j, Eclipse, Tomcat</a>
+    
+    
+      <a class="pull-right" href="/blog/2004/12/30/now-that-i-think-about-it/" title="Next Post: Now That I Think About It...">Now That I Think About It... &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/04/old-days/">Old Days</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/02/08/336-hours/">336 Hours</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
