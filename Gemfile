@@ -16,7 +16,8 @@ group :development do
   gem 'liquid', '~> 2.3.0'
   gem 'hpricot'
   gem 'jekyll-import'
-  
+  gem 'guard'
+  gem 'guard-livereload'
 end
 
 gem 'sinatra', '~> 1.4.2'
