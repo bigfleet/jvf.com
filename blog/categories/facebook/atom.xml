@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: facebook, | Hello, I'm Jim Van Fleet]]></title>
+  <link href="http://new.jimvanfleet.com//blog/categories/facebook/atom.xml" rel="self"/>
+  <link href="http://new.jimvanfleet.com//"/>
+  <updated>2013-10-21T15:04:44-04:00</updated>
+  <id>http://new.jimvanfleet.com//</id>
+  <author>
+    <name><![CDATA[Jim Van Fleet]]></name>
+    <email><![CDATA[jim@jimvanfleet.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook OAuth using OmniAuth and Rails 4]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
+    <updated>2013-10-21T11:30:00-04:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
+    <content type="html"><![CDATA[<h2>Allowing Facebook logins in Rails 4</h2>
+
+
+
+
+<p>I had to copy and paste in information from a variety of sources to end up
+with something I liked at the time of this writing.  Since I want to walk my
+students in <a href="http://www.launchpadcodeacademy.com/">Launchpad Code
+Academy</a> through this process, I figured I'd make this walkthrough public.
+It may help newcomers for quite some time to come!</p>
+
+
+
+
+<h3>About this solution</h3>
+
+
+
+
+<p>We are going to be using a server-side OAuth authorization.  The mechanism
+uses some JavaScript checks and interfaces with the JS Facebook API, but
+ultimately the connection is made on the server-side.</p>
+
+
+
+
+<p>You don't necessarily have to be using Devise, but if you're not, our tips
+about how to leverage this approach for Facebook login may not be helpful.</p>
+
+
+
+
+<h3>Getting started</h3>
+
+
+<p><span class="step">Step 1: Installing gems</span></p>
+
+<p>Include these gems in your Gemfile:</p>
+
+
+<p><code>ruby Gemfile
+gem "omniauth"
+gem 'omniauth-facebook', '1.4.0'
+</code></p>
+
+<p>Install them in your terminal with the bundle command:</p>
+
+
+<p><code>bash Terminal
+bundle install
+</code></p>
+
+<p><span class="step">Step 2</span></p>
+
+<p>Per the <a href="https://github.com/mkdynamic/omniauth-facebook#usage">usage
+instructions for omniauth-facebook</a>, create a new file in config/initializers
+named omniauth.rb:</p>
+
+
+<p>```ruby config/initializers/omniauth.rb
+OmniAuth.config.logger = Rails.logger</p>
+
+<p>Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :facebook, ENV[&lsquo;FACEBOOK_KEY&rsquo;], ENV[&lsquo;FACEBOOK_SECRET&rsquo;]
+end
+```</p>
+
+<p>The config/initializers directory is designed for use on Rails startup to
+configure how libraries are intended to operate.  In this case, we want our
+Rails application to know that we are using Omniauth, and are configuring the
+Facebook provider to reference environment variables to run.</p>
+
+
+
+
+<p>To set these environment variables properly, we'll need to go get some info
+from Facebook.</p>
+
+
+
+
+<h3>Creating and configuring a Facbook App</h3>
+
+
+<p><span class="step">Step 1: An app</span></p>
+
+<p>I honestly don't remember what it's like to register for a Facebook developer
+account, other than it should be free, and it should happen at the
+<a href="https://developers.facebook.com/">Facebook Developers</a> site.</p>
+
+
+
+
+<p>When you've registered properly, there should be an "Apps" tab in your
+navigation.  Click on that to travel to <a href="https://developers.facebook.com/apps">
+your list of apps.</a></p>
+
+
+
+
+<p>Click "Create New App".  You should pick a name that indicates you are doing
+testing.  You can place it in a namespace, if you like, but that's optional.</p>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/7383f6e2-cebb-4bcc-b630-6df857a7ee54/6cb1990638eea3cedcbf2bb5372279e6/deep/0/Facebook%20Developers.png">https://www.evernote.com/shard/s1/sh/7383f6e2-cebb-4bcc-b630-6df857a7ee54/6cb1990638eea3cedcbf2bb5372279e6/deep/0/Facebook%20Developers.png</a>' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><p></p>
+
+<p><p>Click &ldquo;Continue&rdquo;, and you should be brought to an application screen that
+contains your App ID (or API Key) and your App Secret.  Note those, but we&rsquo;ll
+need to fill in some information here.</p></p>
+
+<p><p>In the &ldquo;App Domains&rdquo; box, put &lsquo;localhost&rsquo;</p></p>
+
+<p><p>Click the green check on &ldquo;Website with Facebook Login&rdquo;, and fill that in with
+<a href="http://localhost:5000/.">http://localhost:5000/.</a>  My students (or anyone who uses <a href="https://github.com/bigfleet/rails-templates">my Rails templates</a>)
+will be able to use this.  This value may be different for you&mdash; make sure that it
+matches whatever you use in development.  localhost:3000 would be common if you
+are using <code>rails s</code> and appname.dev would be likely if you were using
+Pow.</p></p>
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/45f415ea-8f8c-4249-ba0e-d7e2c40dde6c/800ff5c9285390d745236d13f5464b03/deep/0/Basic-%20Facebook%20Developers.png">https://www.evernote.com/shard/s1/sh/45f415ea-8f8c-4249-ba0e-d7e2c40dde6c/800ff5c9285390d745236d13f5464b03/deep/0/Basic-%20Facebook%20Developers.png</a>' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><span class="step">Step 2: Installing application details</span></p>
+
+<p><p>Students in my class use <a
+href="https://github.com/ddollar/foreman">foreman</a> to run their development
+environment.  If you won&rsquo;t, perhaps you can consider <a href="https://github.com/bkeepers/dotenv">dotenv</a>,
+to load env variables from files for you?  It&rsquo;s important not to commit
+sensitive information like this Facebook App Secret to your repository.  Note
+the difficulties and caveats, should you ever need to <a href="https://help.github.com/articles/remove-sensitive-data">remove sensitive data</a>.
+Usage of foreman or dotenv can help with that.</p></p>
+
+<p><p>If you are using foreman, you can add these files to your .env file (which is
+not in version control).  Instead of the values below, they should match your
+own app&rsquo;s key and secret that you obtained previously.  You cannot just copy and
+paste this file.  I totally made up these numbers, and they will not work.</p></p>
+
+<p><code>ruby .env
+FACEBOOK_KEY=686338067928534
+FACEBOOK_SECRET=60b9fe21ab431897eabc0743b39a5406
+</code></p>
+
+<p><h3>Facebook Powers: Activate!</h3></p>
+
+<p><span class="step">Step 1: Create a model to store the authentications</span></p>
+
+<p><p>We don&rsquo;t want to tie authentications to a user in a 1-1 way, since we&rsquo;d love
+to allow connecting with other social networks by default.  We want a user to
+have many social networks attached, potentially, so we&rsquo;ll create a model that
+appropriately attaches to users.</p></p>
+
+<p><p>Create an Authentication model using this command: </p></p>
+
+<p><code>bash Terminal
+bundle exec rails g model Authentication user_id:integer provider:string uid:string name:string oauth_token:string oauth_expires_at:datetime
+</code></p>
+
+<p><p>This will create a migration for you similar to this:</p></p>
+
+<p>```ruby db/migrate/20131015222934_create_authentications.rb
+class CreateAuthentications &lt; ActiveRecord::Migration
+  def change</p>
+
+<pre><code>create_table :authentications do |t|
+  t.integer :user_id
+  t.string :provider
+  t.string :uid
+  t.string :name
+  t.string :oauth_token
+  t.datetime :oauth_expires_at
+
+  t.timestamps
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p><p>You&rsquo;ll also need to provide a mechanism for Omniauth to save the data it can
+provide to your DB for your use.  After you issue the above command, you should
+have an <code>app/models/authentications.rb</code> file.  Replace that file with
+these contents:</p></p>
+
+<p>```ruby app/models/authentication.rb
+class Authentication &lt; ActiveRecord::Base</p>
+
+<p>  belongs_to :user</p>
+
+<p>  def self.from_omniauth(user, auth)</p>
+
+<pre><code>where(auth.slice(:provider, :uid)).first_or_initialize.tap do |authentication|
+  authentication.user = user
+  authentication.provider = auth.provider
+  authentication.uid = auth.uid
+  authentication.name = auth.info.name
+  authentication.oauth_token = auth.credentials.token
+  authentication.oauth_expires_at = Time.at(auth.credentials.expires_at)
+  authentication.save!
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```</p>
+
+<p><p>Be sure to also add <code>has_many :authentications</code> to your
+<code>app/models/user.rb</code> file.</p></p>
+
+<p><span class="step">Step 2: Create the authentication user interface</span></p>
+
+<p><code>bash Terminal
+bundle exec rails g controller authentications index
+</code></p>
+
+<p><p>This will create an authentications controller, and a view file for you.  We
+don&rsquo;t quite want any of what we get out of the package.  Copy these file
+contents into your authentications controller:</p></p>
+
+<p>```ruby app/controllers/authentications_controller.rb
+class AuthenticationsController &lt; ApplicationController</p>
+
+<p>  def index</p>
+
+<pre><code>@authentications = current_user.authentications if current_user
+</code></pre>
+
+<p>  end</p>
+
+<p>  def create</p>
+
+<pre><code>auth = Authentication.from_omniauth(current_user, env["omniauth.auth"])
+flash[:notice] = "Authentication successful."
+redirect_to authentications_url
+</code></pre>
+
+<p>  end</p>
+
+<p>  def destroy</p>
+
+<pre><code>@authentication = current_user.authentications.find(params[:id])
+@authentication.destroy
+flash[:notice] = "Successfully destroyed authentication."
+redirect_to authentications_url
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```
+<p>Place this file into your JavaScript directory.  Note that <strong>this one won&rsquo;t
+work either by just copying and pasting</strong>!  You need to include your non-sensitive
+App ID :</p></p>
+
+<p>```javascript app/assets/javascripts/facebook.js
+// Additional JS functions here
+window.fbAsyncInit = function() {
+  FB.init({</p>
+
+<pre><code>appId      : 686338067928534, // App ID
+status     : true, // check login status
+cookie     : true, // enable cookies to allow the server to access the session
+xfbml      : true  // parse XFBML
+</code></pre>
+
+<p>  });
+};</p>
+
+<p>// Load the SDK Asynchronously
+(function(d){
+   var js, id = &lsquo;facebook-jssdk&rsquo;, ref = d.getElementsByTagName(&lsquo;script&rsquo;)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(&lsquo;script&rsquo;); js.id = id; js.async = true;
+   js.src = &ldquo;//connect.facebook.net/en_US/all.js&rdquo;;
+   ref.parentNode.insertBefore(js, ref);
+}(document));</p>
+
+<p>function fblogin() {
+  FB.getLoginStatus(function(response) {</p>
+
+<pre><code>if(response.status == "connected") {
+  location.href =
+    '/auth/facebook/callback?' +
+    $.param({ signed_request: response.authResponse.signedRequest })
+} else {
+ FB.login(function(response) {
+  if (response.authResponse) {
+      '/auth/facebook/callback?' +
+      $.param({ signed_request: response.authResponse.signedRequest })
+  }
+ })
+}
+</code></pre>
+
+<p>  })
+};
+```
+<p>Copy this view file into place, as the bulk of our tutorial actions will
+happen there:</p></p>
+
+<p>```erb app/views/authentications/index.html.erb
+&lt;% if @authentications %>
+  &lt;% unless @authentications.empty? %></p>
+
+<pre><code>&lt;p&gt;&lt;strong&gt;You can sign in to this account using:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="authentications"&gt;
+  &lt;% for authentication in @authentications %&gt;
+    &lt;div class="authentication"&gt;
+      &lt;%= image_tag "#{authentication.provider}_32.png", :size =&gt; "32x32" %&gt;
+      &lt;div class="provider"&gt;&lt;%= authentication.provider.titleize %&gt;&lt;/div&gt;
+      &lt;div class="uid"&gt;&lt;%= authentication.uid %&gt;&lt;/div&gt;
+      &lt;%= link_to "X", authentication, :confirm =&gt; 'Are you sure you want to remove this authentication option?', :method =&gt; :delete, :class =&gt; "remove" %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+  &lt;div class="clear"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>  &lt;% end %>
+  <p><strong>Add another service to sign in with:</strong></p>
+&lt;% else %>
+  <p><strong>Sign in through one of these services:</strong></p>
+&lt;% end %></p>
+
+<p><!--
+<a href="http://new.jimvanfleet.com//auth/twitter" class="auth_provider">
+  &lt;%= image_tag &ldquo;twitter_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Twitter&rdquo; %>
+  Twitter
+</a>
+&mdash;>
+&lt;% unless @authentications.select{ |a| a.provider == &ldquo;facebook&rdquo; }.any? %>
+  &lt;%= link_to_function image_tag(&ldquo;facebook_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Facebook&rdquo;), &lsquo;fblogin()&rsquo; %>
+&lt;% end %>
+<!--
+<a href="http://new.jimvanfleet.com//auth/google_apps" class="auth_provider">
+  &lt;%= image_tag &ldquo;google_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Google&rdquo; %>
+  Google
+</a>
+&mdash;></p>
+
+<p><div class="clear"></div>
+```</p>
+
+<p><p>Let&rsquo;s pretty this up a little with some CSS:</p></p>
+
+<p>```sass app/stylesheets/authentications.css.scss
+.authentications {
+  margin-bottom: 30px;
+}</p>
+
+<p>.authentication {
+  width: 130px;
+  float: left;
+  background-color: #EEE;
+  border: solid 1px #999;
+  padding: 5px 10px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  position: relative;
+  margin-right: 10px;
+}</p>
+
+<p>.authentication .remove {
+  text-decoration: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  color: #333;
+  padding: 2px 4px;
+  font-size: 10px;
+}</p>
+
+<p>.authentication .remove:hover {
+  color: #CCC;
+  background-color: #777;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}</p>
+
+<p>.authentication img {
+  float: left;
+  margin-right: 10px;
+}</p>
+
+<p>.authentication .provider {
+  font-weight: bold;
+}</p>
+
+<p>.authentication .uid {
+  color: #666;
+  font-size: 11px;
+}</p>
+
+<p>.auth_provider img {
+  display: block;
+}</p>
+
+<p>.auth_provider {
+  float: left;
+  text-decoration: none;
+  margin-right: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+```</p>
+
+<p><span class="step">Step 3: Putting it all together</span></p>
+
+<p><p>Your route file should contain a trace of the authentications you plan on
+dealing with:</p></p>
+
+<p>```ruby config/routes.rb
+  resources :authentications</p>
+
+<p>  match &lsquo;auth/:provider/callback&rsquo;, to: &lsquo;authentications#create&rsquo;, via: [:get, :post]
+  match &lsquo;auth/failure&rsquo;, to: redirect(&lsquo;/&rsquo;), via: [:get, :post]
+```</p>
+
+<p><p>Ensure that your Facebook JavaScript is loaded into the asset pipeline:</p></p>
+
+<p><code>coffeescript app/assets/javascripts/application.js
+//= require facebook
+</code></p>
+
+<p><p>Ensure that your authentications CSS is loaded into the asset pipeline:</p></p>
+
+<p><code>sass app/assets/stylesheets/application.css.scss
+@import "authentications";
+</code></p>
+
+<p><p>Include a link to social logins to your already logged in accounts:</p></p>
+
+<p><code>erb app/views/layouts/application.html.erb
+&lt;%= link_to "Social Accounts", authentications_path %&gt;
+</code></p>
+
+<p><p>Download some Facebook icons:</p></p>
+
+<p><code>bash Terminal
+curl -o app/assets/images/facebook_32.png https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png
+cp app/assets/images/facebook_32.png app/assets/images/facebook_64.png
+</code></p>
+
+<p><p>You can use Facebook to let people create new accounts, but that&rsquo;s left as an
+exercise to the reader!</p></p>
+
+<p><span class="step">Step 4: Boot it up</span></p>
+
+<p><p>Issue a command to start your server:</p></p>
+
+<p><code>bash Terminal
+bundle exec foreman start
+</code></p>
+
+<p><p>Since setting environment variables is important to the application running
+properly, <code>rails s</code> probably won&rsquo;t work any longer!  Foreman will put
+us in good position to manage environment variables (and pull user social
+graphs via Sidekiq later!)</p></p>
+
+<p><p>You should be able to click through to the</p>
+
+<p><h3>Acknowledgements:</h3></p>
+
+<p><p>Many of the file contents are avialable in <a href="https://gist.github.com/bigfleet/7088190">this gist</a>.</p></p>
+
+<p><p>The amazing RailsCasts series provided not <a href="http://railscasts.com/episodes/235-omniauth-part-1">one</a> but <a href="http://railscasts.com/episodes/360-facebook-authentication">two</a> pieces of this finished puzzle.  Thanks, Ryan!</p></p>
+
+<p><p>This StackOverflow post on <a href="http://stackoverflow.com/questions/11597130/omniauth-facebook-keeps-reporting-invalid-credentials">invalid_credentials in Omniauth-facebook</a> pointed out the need to use a particular omniauth-facebook release.  Another StackOverflow post pointed out the need to <a href="http://stackoverflow.com/questions/12370056/omniauth-strategies-facebook-noauthorizationcodeerror-must-pass-either-a-code">send a signed_request parameter with the GET to the Facebook SDK</a>.  That&rsquo;s incorporated into the above JavaScript.</p></p>
+]]></content>
+  </entry>
+  
+</feed>

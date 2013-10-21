@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RailsConf Writeups: When V is for Vexing - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Put on by Bruce Williams and an uncredited Marcel Molina, Jr., this session proved to be one of the highlights of the conference for me personally. &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://new.jimvanfleet.com//blog/2007/05/24/railsconf-writeups-when-v-is-for-vexing/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="RailsConf Writeups: When V is for Vexing" />
+  <meta name="og:description" content="Put on by Bruce Williams and an uncredited Marcel Molina, Jr., this session proved to be one of the highlights of the conference for me personally. &hellip;" />
+  <meta name="og:url" content="http://new.jimvanfleet.com//blog/2007/05/24/railsconf-writeups-when-v-is-for-vexing/"/>
+  <meta name="url" content="http://new.jimvanfleet.com//blog/2007/05/24/railsconf-writeups-when-v-is-for-vexing/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:new.jimvanfleet.com/" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">RailsConf Writeups: When v Is for Vexing</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-24T00:00:00-04:00" pubdate data-updated="true">May 24<span>th</span>, 2007</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Put on by <a href="http://codefluency.com/">Bruce Williams</a> and an uncredited <a href="http://vernix.org/marcel/">Marcel Molina, Jr.</a>, this session proved to be one of the highlights of the conference for me personally.  My experience up to this point has led to a lot of time spent with <span class="caps">HTML</span> and <span class="caps">CSS</span> education&#8212;thus I spend a lot of time working with those two technologies.  As a result, I&#8217;ve seen a lot of view code, and produce a lot of the code smells that they covered in the talk.</p>
+
+
+	<p>I want to specifically give voice on my own forum to echo one of their own observations.  So much focus has been given in the Rails community toward getting the right balance of responsibility between the model and the controller.  Between them, the model and the data just make data available to the controller.  That&#8217;s a <strong>lot</strong> of work to do in the view, to create the sort of dynamic interfaces that end users expect us in this day and age.  <span class="caps">HTML</span>, JavaScript, and <span class="caps">CSS</span> are complicated enough that there are many professionals who operate only on that level.  At least to this point, the view has not gotten the same sort of attention that the other levels have gotten from the developer community, even though it&#8217;s very important and difficult to get view code written cleanly and correctly.  The two speakers then gave a dynamic walkthrough of several problems that manifest in view code, along with examples of &#8220;smelly&#8221; and &#8220;fixed&#8221; code.  In the session, they went into greater depth for some of the examples.</p>
+
+
+	<p>If you deal with Rails views at all, I recommend as strongly as possible that you <a href="http://www.web2expo.com/presentations/rails2007/VisForVexing.pdf">download the slides</a> and read through their presentation.  You won&#8217;t have a chance to ask them questions directly, but I&#8217;m quite sure that the two of them would be happy to engage with a reader.</p>
+
+
+	<p>One particular technique that received quite a bit of attention, and which I plan on following up on as soon as I can is the block helper.  It was used twice for the smells that I put out quite frequently, as well as getting some discussion as an alternative for partials.  Seeing how I use partials in my own code, this is a very big deal.  Anticipate more posts from me on this topic in the future.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-24T00:00:00-04:00" pubdate data-updated="true">May 24<span>th</span>, 2007</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2007/05/24/railsconf-writeups-day-1/" title="Previous Post: RailsConf Writeups:  Day 1">&laquo; RailsConf Writeups:  Day 1</a>
+    
+    
+      <a class="pull-right" href="/blog/2007/05/24/railsconf-writeups-your-first-day-with-jruby-on-rails/" title="Next Post: RailsConf Writeups: Your First Day With JRuby on Rails">RailsConf Writeups: Your First Day With JRuby on Rails &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/04/old-days/">Old Days</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

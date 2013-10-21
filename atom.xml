@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Hello, I'm Jim Van Fleet]]></title>
+  <link href="http://new.jimvanfleet.com//atom.xml" rel="self"/>
+  <link href="http://new.jimvanfleet.com//"/>
+  <updated>2013-10-21T15:04:44-04:00</updated>
+  <id>http://new.jimvanfleet.com//</id>
+  <author>
+    <name><![CDATA[Jim Van Fleet]]></name>
+    <email><![CDATA[jim@jimvanfleet.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook OAuth using OmniAuth and Rails 4]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
+    <updated>2013-10-21T11:30:00-04:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
+    <content type="html"><![CDATA[<h2>Allowing Facebook logins in Rails 4</h2>
+
+
+
+
+<p>I had to copy and paste in information from a variety of sources to end up
+with something I liked at the time of this writing.  Since I want to walk my
+students in <a href="http://www.launchpadcodeacademy.com/">Launchpad Code
+Academy</a> through this process, I figured I&#8217;d make this walkthrough public.
+It may help newcomers for quite some time to come!</p>
+
+
+
+
+<h3>About this solution</h3>
+
+
+
+
+<p>We are going to be using a server-side OAuth authorization.  The mechanism
+uses some JavaScript checks and interfaces with the JS Facebook API, but
+ultimately the connection is made on the server-side.</p>
+
+
+
+
+<p>You don&#8217;t necessarily have to be using Devise, but if you&#8217;re not, our tips
+about how to leverage this approach for Facebook login may not be helpful.</p>
+
+
+
+
+<h3>Getting started</h3>
+
+
+<p><span class="step">Step 1: Installing gems</span></p>
+
+<p>Include these gems in your Gemfile:</p>
+
+
+
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;omniauth&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth-facebook&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4.0&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Install them in your terminal with the bundle command:</p>
+
+
+
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><span class="step">Step 2</span></p>
+
+<p>Per the <a href="https://github.com/mkdynamic/omniauth-facebook#usage">usage
+instructions for omniauth-facebook</a>, create a new file in config/initializers
+named omniauth.rb:</p>
+
+
+
+
+<figure class='code'><figcaption><span>config/initializers/omniauth.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">OmniAuth</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">logger</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">OmniAuth</span><span class="p">:</span><span class="ss">:Builder</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">provider</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_KEY&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_SECRET&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>The config/initializers directory is designed for use on Rails startup to
+configure how libraries are intended to operate.  In this case, we want our
+Rails application to know that we are using Omniauth, and are configuring the
+Facebook provider to reference environment variables to run.</p>
+
+
+
+
+<p>To set these environment variables properly, we&#8217;ll need to go get some info
+from Facebook.</p>
+
+
+
+
+<h3>Creating and configuring a Facbook App</h3>
+
+
+<p><span class="step">Step 1: An app</span></p>
+
+<p>I honestly don&#8217;t remember what it&#8217;s like to register for a Facebook developer
+account, other than it should be free, and it should happen at the
+<a href="https://developers.facebook.com/">Facebook Developers</a> site.</p>
+
+
+
+
+<p>When you&#8217;ve registered properly, there should be an &#8220;Apps&#8221; tab in your
+navigation.  Click on that to travel to <a href="https://developers.facebook.com/apps">
+your list of apps.</a></p>
+
+
+
+
+<p>Click &#8220;Create New App&#8221;.  You should pick a name that indicates you are doing
+testing.  You can place it in a namespace, if you like, but that&#8217;s optional.</p>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/7383f6e2-cebb-4bcc-b630-6df857a7ee54/6cb1990638eea3cedcbf2bb5372279e6/deep/0/Facebook%20Developers.png' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><p></p>
+
+<p><p>Click &ldquo;Continue&rdquo;, and you should be brought to an application screen that
+contains your App ID (or API Key) and your App Secret.  Note those, but we&rsquo;ll
+need to fill in some information here.</p></p>
+
+<p><p>In the &ldquo;App Domains&rdquo; box, put &lsquo;localhost&rsquo;</p></p>
+
+<p><p>Click the green check on &ldquo;Website with Facebook Login&rdquo;, and fill that in with
+<a href="http://localhost:5000/.">http://localhost:5000/.</a>  My students (or anyone who uses <a href="https://github.com/bigfleet/rails-templates">my Rails templates</a>)
+will be able to use this.  This value may be different for you&mdash; make sure that it
+matches whatever you use in development.  localhost:3000 would be common if you
+are using <code>rails s</code> and appname.dev would be likely if you were using
+Pow.</p></p>
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/45f415ea-8f8c-4249-ba0e-d7e2c40dde6c/800ff5c9285390d745236d13f5464b03/deep/0/Basic-%20Facebook%20Developers.png' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><span class="step">Step 2: Installing application details</span></p>
+
+<p><p>Students in my class use <a
+href="https://github.com/ddollar/foreman">foreman</a> to run their development
+environment.  If you won&rsquo;t, perhaps you can consider <a href="https://github.com/bkeepers/dotenv">dotenv</a>,
+to load env variables from files for you?  It&rsquo;s important not to commit
+sensitive information like this Facebook App Secret to your repository.  Note
+the difficulties and caveats, should you ever need to <a href="https://help.github.com/articles/remove-sensitive-data">remove sensitive data</a>.
+Usage of foreman or dotenv can help with that.</p></p>
+
+<p><p>If you are using foreman, you can add these files to your .env file (which is
+not in version control).  Instead of the values below, they should match your
+own app&rsquo;s key and secret that you obtained previously.  You cannot just copy and
+paste this file.  I totally made up these numbers, and they will not work.</p></p>
+
+<p><figure class='code'><figcaption><span>.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">FACEBOOK_KEY</span><span class="o">=</span><span class="mi">686338067928534</span>
+</span><span class='line'><span class="no">FACEBOOK_SECRET</span><span class="o">=</span><span class="mi">60</span><span class="n">b9fe21ab431897eabc0743b39a5406</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><h3>Facebook Powers: Activate!</h3></p>
+
+<p><span class="step">Step 1: Create a model to store the authentications</span></p>
+
+<p><p>We don&rsquo;t want to tie authentications to a user in a 1-1 way, since we&rsquo;d love
+to allow connecting with other social networks by default.  We want a user to
+have many social networks attached, potentially, so we&rsquo;ll create a model that
+appropriately attaches to users.</p></p>
+
+<p><p>Create an Authentication model using this command: </p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g model Authentication user_id:integer provider:string uid:string name:string oauth_token:string oauth_expires_at:datetime
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>This will create a migration for you similar to this:</p></p>
+
+<p><figure class='code'><figcaption><span>db/migrate/20131015222934_create_authentications.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateAuthentications</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:authentications</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:user_id</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:provider</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:uid</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:oauth_token</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">datetime</span> <span class="ss">:oauth_expires_at</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>You&rsquo;ll also need to provide a mechanism for Omniauth to save the data it can
+provide to your DB for your use.  After you issue the above command, you should
+have an <code>app/models/authentications.rb</code> file.  Replace that file with
+these contents:</p></p>
+
+<p><figure class='code'><figcaption><span>app/models/authentication.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Authentication</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">from_omniauth</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">where</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="ss">:provider</span><span class="p">,</span> <span class="ss">:uid</span><span class="p">))</span><span class="o">.</span><span class="n">first_or_initialize</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">authentication</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">provider</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">uid</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">oauth_token</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">credentials</span><span class="o">.</span><span class="n">token</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">oauth_expires_at</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">credentials</span><span class="o">.</span><span class="n">expires_at</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">save!</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Be sure to also add <code>has_many :authentications</code> to your
+<code>app/models/user.rb</code> file.</p></p>
+
+<p><span class="step">Step 2: Create the authentication user interface</span></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g controller authentications index
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>This will create an authentications controller, and a view file for you.  We
+don&rsquo;t quite want any of what we get out of the package.  Copy these file
+contents into your authentications controller:</p></p>
+
+<p><figure class='code'><figcaption><span>app/controllers/authentications_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="vi">@authentications</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span> <span class="k">if</span> <span class="n">current_user</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>    <span class="n">auth</span> <span class="o">=</span> <span class="no">Authentication</span><span class="o">.</span><span class="n">from_omniauth</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">env</span><span class="o">[</span><span class="s2">&quot;omniauth.auth&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Authentication successful.&quot;</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">authentications_url</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">destroy</span>
+</span><span class='line'>    <span class="vi">@authentication</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@authentication</span><span class="o">.</span><span class="n">destroy</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Successfully destroyed authentication.&quot;</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">authentications_url</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+<p>Place this file into your JavaScript directory.  Note that <strong>this one won&rsquo;t
+work either by just copying and pasting</strong>!  You need to include your non-sensitive
+App ID :</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/javascripts/facebook.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Additional JS functions here</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">fbAsyncInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">appId</span>      <span class="o">:</span> <span class="mi">686338067928534</span><span class="p">,</span> <span class="c1">// App ID</span>
+</span><span class='line'>    <span class="nx">status</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// check login status</span>
+</span><span class='line'>    <span class="nx">cookie</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// enable cookies to allow the server to access the session</span>
+</span><span class='line'>    <span class="nx">xfbml</span>      <span class="o">:</span> <span class="kc">true</span>  <span class="c1">// parse XFBML</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Load the SDK Asynchronously</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span>
+</span><span class='line'>   <span class="kd">var</span> <span class="nx">js</span><span class="p">,</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;facebook-jssdk&#39;</span><span class="p">,</span> <span class="nx">ref</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span><span class="k">return</span><span class="p">;}</span>
+</span><span class='line'>   <span class="nx">js</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span> <span class="nx">js</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span> <span class="nx">js</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">js</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;//connect.facebook.net/en_US/all.js&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">ref</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span> <span class="nx">ref</span><span class="p">);</span>
+</span><span class='line'><span class="p">}(</span><span class="nb">document</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">fblogin</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">getLoginStatus</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="s2">&quot;connected&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span>
+</span><span class='line'>        <span class="s1">&#39;/auth/facebook/callback?&#39;</span> <span class="o">+</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">signed_request</span><span class="o">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">.</span><span class="nx">signedRequest</span> <span class="p">})</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>     <span class="nx">FB</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="s1">&#39;/auth/facebook/callback?&#39;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">signed_request</span><span class="o">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">.</span><span class="nx">signedRequest</span> <span class="p">})</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>     <span class="p">})</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+<p>Copy this view file into place, as the bulk of our tutorial actions will
+happen there:</p></p>
+
+<p><figure class='code'><figcaption><span>app/views/authentications/index.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="vi">@authentications</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    &lt;p&gt;&lt;strong&gt;You can sign in to this account using:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;authentications&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">authentication</span> <span class="k">in</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;div class=&quot;authentication&quot;&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">authentication</span><span class="o">.</span><span class="n">provider</span><span class="si">}</span><span class="s2">_32.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;32x32&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">          &lt;div class=&quot;provider&quot;&gt;</span><span class="cp">&lt;%=</span> <span class="n">authentication</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">titleize</span> <span class="cp">%&gt;</span><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">          &lt;div class=&quot;uid&quot;&gt;</span><span class="cp">&lt;%=</span> <span class="n">authentication</span><span class="o">.</span><span class="n">uid</span> <span class="cp">%&gt;</span><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">authentication</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure you want to remove this authentication option?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;remove&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;/div&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;p&gt;&lt;strong&gt;Add another service to sign in with:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;p&gt;&lt;strong&gt;Sign in through one of these services:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;!&mdash;</span>
+</span><span class='line'><span class="x">&lt;a href=&quot;/auth/twitter&quot; class=&quot;auth_provider&quot;&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;twitter_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Twitter&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  Twitter</span>
+</span><span class='line'><span class="x">&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&mdash;&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="vi">@authentications</span><span class="o">.</span><span class="n">select</span><span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="n">a</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;facebook&quot;</span> <span class="p">}</span><span class="o">.</span><span class="n">any?</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">link_to_function</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;facebook_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Facebook&quot;</span><span class="p">),</span> <span class="s1">&#39;fblogin()&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;!&mdash;</span>
+</span><span class='line'><span class="x">&lt;a href=&quot;/auth/google_apps&quot; class=&quot;auth_provider&quot;&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;google_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Google&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  Google</span>
+</span><span class='line'><span class="x">&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&mdash;&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Let&rsquo;s pretty this up a little with some CSS:</p></p>
+
+<p><figure class='code'><figcaption><span>app/stylesheets/authentications.css.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.authentications</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">30</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">width</span><span class="o">:</span> <span class="mi">130</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#EEE</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">border</span><span class="o">:</span> <span class="no">solid</span> <span class="mi">1</span><span class="kt">px</span> <span class="mh">#999</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-moz-border-radius</span><span class="o">:</span> <span class="mi">8</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-webkit-border-radius</span><span class="o">:</span> <span class="mi">8</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.remove</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">text-decoration</span><span class="o">:</span> <span class="no">none</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">top</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">right</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="mi">4</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">font-size</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.remove</span><span class="nd">:hover</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#CCC</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#777</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-moz-border-radius</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-webkit-border-radius</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nt">img</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.provider</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.uid</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#666</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">font-size</span><span class="o">:</span> <span class="mi">11</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.auth_provider</span> <span class="nt">img</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.auth_provider</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">text-decoration</span><span class="o">:</span> <span class="no">none</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><span class="step">Step 3: Putting it all together</span></p>
+
+<p><p>Your route file should contain a trace of the authentications you plan on
+dealing with:</p></p>
+
+<p><figure class='code'><figcaption><span>config/routes.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">resources</span> <span class="ss">:authentications</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/:provider/callback&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;authentications#create&#39;</span><span class="p">,</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/failure&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Ensure that your Facebook JavaScript is loaded into the asset pipeline:</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">//=</span> <span class="nx">require</span> <span class="nx">facebook</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Ensure that your authentications CSS is loaded into the asset pipeline:</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/stylesheets/application.css.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;authentications&quot;;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Include a link to social logins to your already logged in accounts:</p></p>
+
+<p><figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Social Accounts&quot;</span><span class="p">,</span> <span class="n">authentications_path</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Download some Facebook icons:</p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -o app/assets/images/facebook_32.png <a href="https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png">https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png</a>
+</span><span class='line'>cp app/assets/images/facebook_32.png app/assets/images/facebook_64.png
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>You can use Facebook to let people create new accounts, but that&rsquo;s left as an
+exercise to the reader!</p></p>
+
+<p><span class="step">Step 4: Boot it up</span></p>
+
+<p><p>Issue a command to start your server:</p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Since setting environment variables is important to the application running
+properly, <code>rails s</code> probably won&rsquo;t work any longer!  Foreman will put
+us in good position to manage environment variables (and pull user social
+graphs via Sidekiq later!)</p></p>
+
+<p><p>You should be able to click through to the</p>
+
+<p><h3>Acknowledgements:</h3></p>
+
+<p><p>Many of the file contents are avialable in <a href="https://gist.github.com/bigfleet/7088190">this gist</a>.</p></p>
+
+<p><p>The amazing RailsCasts series provided not <a href="http://railscasts.com/episodes/235-omniauth-part-1">one</a> but <a href="http://railscasts.com/episodes/360-facebook-authentication">two</a> pieces of this finished puzzle.  Thanks, Ryan!</p></p>
+
+<p><p>This StackOverflow post on <a href="http://stackoverflow.com/questions/11597130/omniauth-facebook-keeps-reporting-invalid-credentials">invalid_credentials in Omniauth-facebook</a> pointed out the need to use a particular omniauth-facebook release.  Another StackOverflow post pointed out the need to <a href="http://stackoverflow.com/questions/12370056/omniauth-strategies-facebook-noauthorizationcodeerror-must-pass-either-a-code">send a signed_request parameter with the GET to the Facebook SDK</a>.  That&rsquo;s incorporated into the above JavaScript.</p></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Charlotte Startup Weekend 3]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/10/19/charlotte-startup-weekend-3/"/>
+    <updated>2011-10-19T00:00:00-04:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/10/19/charlotte-startup-weekend-3</id>
+    <content type="html"><![CDATA[<p>I haven&#8217;t blogged since the last Startup Weekend in Charlotte!  Must mean it&#8217;s time for another one, as the next Startup Weekend approaches.</p>
+	<p>First is <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend 3</a>, where I am a co-organizer.  You can read our <a href="http://charlotte.startupweekend.org/2011/10/13/announcing-charlotte-startup-weekend-3/">kickoff blog for <span class="caps">CSW3</span></a> on our site.  We also have testimonials from <a href="http://charlotte.startupweekend.org/2011/10/18/technologists-love-charlotte-startup-weekend/">technologists</a> and <a href="http://charlotte.startupweekend.org/2011/10/18/tagseats-a-special-charlotte-startup-weekend-testimonial/">business people</a>.  This is a great event for working on a project for the fun of it, and making friends and connections in the Charlotte startup community at the same time.</p>
+
+	<p>It’s November 4-6, so it’s in a few weeks.  We have a lot of sponsors, judges, advisors and volunteers to introduce, but we need attendees!  If you cannot afford the registration fees, please contact me, as there may be some scholarship possibilities.</p>
+
+	<p>If you’re not sure whether Startup Weekend is right for you, there’s an event from Collaborate <span class="caps">CLT</span> and <a href="http://www.meetup.com/Startups/Charlotte-NC/428152/">CLT Launch</a> hosted by <a href="http://www.meetup.com/Packard-Place-Innovation-Entrepreneurship-Community-Group/events/37957682/">Packard Place</a> to help you evaluate that on Tuesday, October 25.</p>
+
+	<p>Finally, if you are interested in the Charlotte startup community, I publish a newsletter that attempts to circulate great information about what’s happening and who is involved here in the city.  You can view the <a href="http://us2.campaign-archive2.com/home/?u=8b4656bd4a093a3bcabfda08a&amp;id=564f168838">archives</a>  or <a href="http://eepurl.com/e0AO6">sign up</a>!</p>
+
+	<p>Thanks for your time and attention.</p>
+
+	<p>Jim Van Fleet<br>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Charlotte Startup Weekend 2]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/03/30/charlotte-startup-weekend-2/"/>
+    <updated>2011-03-30T00:00:00-04:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/03/30/charlotte-startup-weekend-2</id>
+    <content type="html"><![CDATA[<p>For those of you who are learning of my existence for the first time, welcome!  I&#8217;m writing today about my involvement with <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend 2</a>, but I have to start with some of my own background to help you understand why you should be involved as well.</p>
+
+<p>I came to Charlotte in January of 2008 to pursue my professional passion of working with Ruby on Rails.  I selected a Charlotte startup over one in the Bay Area because I believed in the business.  During our time here, my wife and I have come to love Charlotte deeply, and have made it our home.  I am an advocate for Charlotte, and I&#8217;m also an admirer and exhibitor of its entreprenurial spirit.  After moving here for one Charlotte startup, I&#8217;ve founded or co-founded two others, and joined a fourth as its CTO.</p>
+
+<p>I am co-organizing <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend 2</a>.  I am donating my time because I believe in the format, and that it&#8217;s exactly what Charlotte&#8217;s maturing entrepreneurial environment needs to take the next step.  During my time as a freelance consultant doing networking in Charlotte, I came to be familiar with a great deal of this city&#8217;s talent in design, software development, marketing, and entrepreneurship.  I believe it&#8217;s time for this claim that I know to be true to become widely believed: this city has an incredible talent base and tremendous potential.  By participating in <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend</a>, you&#8217;ll be teaming with some of Charlotte&#8217;s best and brightest for an inspiring weekend of networking, friendship, and working together.</p>
+
+<p>The agenda is available <a href="http://charlotte.startupweekend.org/">on the CSW2 website</a>, but here is a summary.  On Friday night, after opening remarks, those who have an idea they&#8217;d like to put before the group to create will pitch their concept.  A small number of those concepts will be selected, and teams will self-organize based on what and who they&#8217;d like to work with.  Work will begin.  Food and drink will be provided.  Advisors will review and offer commentary on your progress.  At the end of the weekend, a panel of judges will decide who has won.  Depending on the organizers meeting their sponsorship goals, there may be prizes awarded the winners.  Perhaps our winner will have an opportunity to become tenants at our host sponsor, <a href="http://packardplace.us/">Packard Place</a>!</p>
+
+<p>The primary sponsor of the <a href="http://startupweekend.org/">Startup Weekend</a> brand is the <a href="http://www.kauffman.org/">Kauffman Foundation</a>, whose mission is promoting entrepreneurship.  A study from that group in 2010 begins <strong><a href="http://www.kauffman.org/newsroom/kauffman-foundation-analysis-emphasizes-importance-of-young-businesses-to-job-creation-in-the-united-states.aspx">When it comes to U.S. job growth, startup companies aren’t everything. They’re the only thing.</a></strong>.  The study reveals that, both on average and for all but seven years between 1977 and 2005, existing firms are net job destroyers, losing 1 million jobs net combined per year. By contrast, in their first year, new firms add an average of 3 million jobs.</p>
+
+<p>I&#8217;d exhort us all to build new companies together here in Charlotte.  Practicing will make us better, and you could meet your next business partner at this event.  You&#8217;ll have a chance to know what everyone on your team is capable of, and you&#8217;ll be comparing results with your peers for weeks to come.  You&#8217;ll look at what has been accomplished by a group of strangers in one weekend, and you&#8217;ll wonder what&#8217;s possible in your own business with your own teams in the next two weeks.</p>
+
+<p>So, <a href="http://www.eventbrite.com/event/1484649627?discount=launchweek">go register!</a>.  And if you are interested in sponsorship, please contact me at jim at jimvanfleet.com and reference CSW in your subject line.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps Culture Hacks | DevOps.com]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/03/10/devops-culture-hacks-devops-com/"/>
+    <updated>2011-03-10T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/03/10/devops-culture-hacks-devops-com</id>
+    <content type="html"><![CDATA[<p><a href="http://devops.com/2011/03/08/devops-culture-hacks/">DevOps Culture Hacks | DevOps.com</a>: &#8220;A turning point for Jesse in terms of moving from an obstacle in the way of change to someone that really knew how to add value with ops practice stemmed from a battle he got into with the ‘VP of Awesome’ at Amazon. This was the nickname of this particular VP because it seemed that pretty much any highly interesting project at Amazon was under this man’s purview. What happened was that Jesse did not want to let out a piece of software because he knew, for sure, that it would bring the site down. The VP overrode him by saying that the site may go down, but the stock price will go up. So, the software went out, and it brought the site down. Two days of firefighting and the site came back up, and so did the stock price, and so did the volume of orders.
+
+The dev team went on and had a party, they were rewarded for job well done, new and profitable functionality released. At the end of the year, Ops got penalized for the outage! Amazon rewarded development for releasing software and providing value and operations was not a part of that. They were in fact penalized for something that was out of their control.&#8221;</p>
+
+<p>This is a great post, go read the rest.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Old Days]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/03/04/old-days/"/>
+    <updated>2011-03-04T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/03/04/old-days</id>
+    <content type="html"><![CDATA[<p><a href="http://www.savagechickens.com/2011/03/old-days.html">Old Days</a>: &#8221;<p><img title="Old Days" src="http://www.savagechickens.com/wp-content/uploads/chickenyoungagain.jpg" alt="Old Days" width="400" height="632"></p>
+<p>More <a href="http://www.savagechickens.com/tag/nostalgia">nostalgia</a>.</p>&#8221;</p>
+
+<p>(Via <a href="http://www.savagechickens.com/">Savage Chickens</a>.)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[336 Hours]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/02/08/336-hours/"/>
+    <updated>2011-02-08T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/02/08/336-hours</id>
+    <content type="html"><![CDATA[In the next two weeks, I expect the following events:
+<ul>
+	<li>I will speak at <a href="http://ignitecharlotte.org">Ignite! Charlotte</a> for a second time, this time in front of a sold-out Neighborhood Theater.</li>
+	<li>My wife Megan and I will have a pre-natal visit and our last ultrasound before the birth of our first child, a son, in April.</li>
+	<li>My wife&#8217;s parents will make their first visit to Charlotte, bringing their dogs with them.  We will have ten living creatures in the house.</li>
+	<li>I will turn 32.</li>
+	<li>My wife will have a baby shower.</li>
+	<li>My parents will visit with the intention of selecting a new home for themselves, here in Charlotte.  After that selection, I expect the logistics of their move to be made in a short amount of time.</li>
+	<li>I will attend a meeting of <a href="http://www.techexeccouncil.org/">CRTEC</a> which promises to become the home of Charlotte&#8217;s technology leadership, followed by a meeting with another CRTEC member to discuss our vision of Charlotte&#8217;s software development community.</li>
+	<li>I will attend an all-day workshop for entrepreneurs focused on preparing for investment and attracting investors to small businesses, put on by the <a href="http://www.bigcouncil.com/">BIG council</a> in conjunction with the SBTDC.</li>
+	<li>I will submit a talk for RailsConf 2011.</li>
+	<li>Megan and I will attend a Punch Brothers show at the Neighborhood Theater.  Chris Eldridge is a dear friend of Megan&#8217;s.</li>
+	<li>I will celebrate the one year anniversary of going freelance with <a href="http://itsbspoke.com">it&#8217;s bspoke</a>.</li>
+	<li>Adam Howell and I will observe the one year anniversary of <a href="http://workmontage.com">Work Montage</a> and our product <a href="http://mocksup.com">Mocksup</a>.</li>
+	<li>And finally, although a more formal announcement will be forthcoming, I&#8217;ve altered bspoke&#8217;s charter to accept a full-time CTO position at <a href="http://otherscreen.com">Otherscreen</a>, a web and mobile startup here in Charlotte, NC.  It is a true privilege to be working with this team already, and you should expect big things.</li>
+</ul>
+That&#8217;s in addition to client work and the particulars of every day life.  If I am overly quiet or missing for a good portion of February, now you know why.  If I owe you something, please keep reminding me.  Except for you, Raquel, I&#8217;m almost done with your recommendation.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Unqualified Reservations: What's wrong with CS research]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research/"/>
+    <updated>2011-02-06T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research</id>
+    <content type="html"><![CDATA[<p><a href="http://unqualified-reservations.blogspot.com/2007/08/whats-wrong-with-cs-research.html">Unqualified Reservations: What&#8217;s wrong with CS research</a>: &#8220;So here&#8217;s the first thing that&#8217;s wrong with CS research: there&#8217;s no such thing as CS research. First, there is no such thing as &#8216;computer science.&#8217; Except for a few performance tests and the occasional usability study, nothing any CS researcher does has anything to do with the Scientific Method. Second, there is no such thing as &#8216;research.&#8217; Any activity which is not obviously productive can be described as &#8216;research.&#8217; The word is entirely meaningless. All just semantics, of course, but it&#8217;s hardly a good sign that even the name is fraudulent.
+
+When we look at what &#8216;CS researchers&#8217; actually do, we see three kinds of people. We can describe them roughly as creative programmers, mathematicians, and bureaucrats.&#8221;</p>
+
+<hr>
+
+<p>To excerpt from this post does it a great disservice, and, like most other things I post to my blog, is highly recommended reading.</p>
+
+<p>From my time in undergraduate CS studies at a prestigious university (attached to the programming languages team, for good measure!), I can both accept and amend the author&#8217;s central claim: CS research sucks.</p>
+
+<p>I worked on a team working on an optimizing compiler for the Java language that could detect when known transforms could be applied yielding a semantically equivalent, but faster, set of bytecodes.  The platform gets marginally faster for everyone, should the research yield meaningful fruit and get adopted upstream.  A noble goal, undertaken by earnest and intelligent men and women, but ultimately doomed.</p>
+
+<p>One note the author does not strike is of the commercial nature of programming languages.  Over and over, we see the pattern: evangelism, adoption, glut of choice, everything starts to suck and get vendor dependent, death.  After its acquisition by Oracle, to the author&#8217;s &#8220;creative programmers&#8221;, Java is now in its final stage, destined to live as a zombie whose musculature (the JVM) is kept alive only by newer languages (e.g. Scala, Clojure, JRuby, Groovy, etc.) that target the platform.  This fact should not be lost on the judgement of quality of CS research.</p>
+
+<p>On the other side of the equation, programming an IDE that supported an alternative implementation of the generics which became part of the Java language in JDK 1.5 introduced me to basically all of the concepts I use still today as a successful programmer.  It wasn&#8217;t because of the work I <strike>did</strike> faked on writing the grammar for this extended language, it was because of the techniques we used as a team in writing the IDE.  Pair programming, test driven development, The Pragmatic Programmer, etc.  It&#8217;s hard for me to think of that being a failure.  I love programming, and it&#8217;s because of my time with the PLT team at Rice University.  Thanks, Dr. Cartwright!</p>
+
+<p>(Original via <a href="https://twitter.com/puredanger/status/34246185044815872">@puredanger</a>.)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[National Anthem]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/01/17/national-anthem/"/>
+    <updated>2011-01-17T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/01/17/national-anthem</id>
+    <content type="html"><![CDATA[This was my favorite rendition I can remember.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hacker News | That was one of the things that really surprised me about the real world: that b...]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b/"/>
+    <updated>2011-01-13T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b</id>
+    <content type="html"><![CDATA[<p><a href="http://news.ycombinator.com/item?id=2095406">Hacker News | That was one of the things that really surprised me about the real world: that b&#8230;</a>: 
+
+<p><strong>Nostrademons</strong> writes:</p>
+
+<p>&#8220;That was one of the things that really surprised me about the real world: that big advancement only comes from big lateral jumps. Different companies, different projects, different markets, or different customers.
+There&#8217;s this model of the world we&#8217;re taught as schoolkids - at least where I grew up - where you work hard at something, do as your told, and slowly but surely you rise up. And maybe at one level it&#8217;s true, but it&#8217;s very slow, and you&#8217;ll never become the sort of success you read about in the paper that way.</p>
+
+<p>Instead, I&#8217;ve found that what usually happens is that you join an organization because you meet some minimum skill baseline that they&#8217;re looking for. And then as you practice and learn from the people around you, you end up picking up a bunch of other skills and getting better at your job. But the people around you generally won&#8217;t notice. First impressions usually pigeonhole you into a general category, and then people are blind to gradual changes.</p>
+<p>So to reap the rewards of everything you&#8217;ve learned, you have to expose yourself to new people. Jump ship, and suddenly you seem really valuable to them, because all those skills you&#8217;ve picked up which your current organization takes for granted are new and useful.</p>
+<p>There&#8217;s a leverage effect as well: people try to work with others of roughly the same level. If you&#8217;re diligent about practicing, you&#8217;ll go from being (hopefully) near the bottom of your team to the top of it. If you then repeat the process, your new teammates better be higher skilled still, and so your team as a whole can tackle more ambitious problems.&#8221;</p>
+
+<hr>
+
+<p>Unless you work very hard at your communications within the organization, this is a very likely outcome.  It may even be inevitable.  Embrace it.</p>
+
+<p>(Via <a href="http://twitter.com/peteforde">@peteforde</a>.)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ben Rockwood on Devops]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/01/04/ben-rockwood-on-devops/"/>
+    <updated>2011-01-04T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/01/04/ben-rockwood-on-devops</id>
+    <content type="html"><![CDATA[<a href="http://www.cuddletech.com/blog/pivot/entry.php?id=1149">The Blog of Ben Rockwood</a>:
+<blockquote>When I first came in contact with the &#8216;Devops&#8217; movement I thought it was about better systems administration, a maturing of the craft. It was, I thought, more about Ops and less about dev. Dev had their day in the sun with Agile&#8230; now sysadmins were getting theirs. Remember, if you can, when Agile came on the scene and how giddy developers got with eXtreme Programming, then Pragmatic Programmer books are everywhere, and then SCRUM comes along, and its all about this &#8216;lets do the old thing, in the new way&#8217; excitement. Re-inventing the craft for a new age. I thought devops was that.</blockquote>
+I&#8217;ve been following Ben for a long time, since he was doing podcasts (ps pipe grep!) with the other <a href="http://joyent.net">Joyent</a> knuckleheads in 2007.  I enjoyed reading this post, although it highlights how wide ranging the term &#8220;Devops&#8221; can be.  My background couldn&#8217;t be more different.  I started by only learning enough system administration to help run the Rails applications I wrote, and now I find myself looking at a trend in the server-side part of the operation that I think is very promising.
+
+It&#8217;s not in the form of &#8220;what Devops means to me&#8221; but my <a href="http://jimvanfleet.com/chef.html">post on Chef</a> from about a year ago still captures what I think Devops has to offer the rest of the development stack, leading right up to the business.  My experience is that the business is the customer of the developers, and the developers are the customers of ops.  Successful devops can use either their experience as developers or their knowledge about the depth and breadth of systems to guide the process of putting together a high quality stack to meet business goals on the budget provided.  I personally do not share Ben&#8217;s fear of having &#8220;hot Devops&#8221; take jobs from specialists&#8211; specialists are part of the team just the same.
+
+With all these differences in approach and background, we still end up with a very similar idea:
+<blockquote>As the good news of &#8220;devops&#8221; spreads it first enlightens, then brings excitement, then dread. If your one of those &#8220;specialists&#8221;, you can easily feel that your now out-dated. Consider that there is now pride within the devops elite that CIO&#8217;s are now talking about having a &#8220;devops strategy&#8221;. Some even suggest a (I&#8217;m paraphrasing) &#8220;evolve or die&#8221; scenario for operations teams. If your a sysadmin who uses Borne or Korn shell instead of Ruby, look out! I don&#8217;t think that&#8217;s fair, nor do I think its true for all. Instead, it all makes more sense when you see it as three camps instead of two, with a the culture over the three&#8230; that is, applications developers (traditional &#8220;dev&#8221;), system administrators (traditional &#8220;ops&#8221;), with a new role in the middle of Systems Engineers that helps glue the camps together. Some of your Systems Engineers will emerge from the dev side, some from the ops side, always having hidden their secret urges to do both. And, as with any emergent role, many will aspire to it but simply not be cut out for it.</blockquote>
+I am a &#8220;smallest team possible&#8221; sort of guy, so I happen to think that considering them three different cultures is a bit much, but I think it should be obvious that more and more recognized roles in engineering are popping up around communication.  It&#8217;s a good thing!
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Letter to the Editor of Charlotte Magazine]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine/"/>
+    <updated>2011-01-04T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine</id>
+    <content type="html"><![CDATA[Thank you for your coverage of the regional conference scene in Charlotte in your piece &#8221;<a href="http://www.charlottemagazine.com/Charlotte-Magazine/January-2011/Rhetorical-Revolution/">Rhetorical Revolution</a>&#8221;.  This piece touches on some very important areas for the future of Charlotte&#8217;s technology culture.
+
+To critics of BarCamp labelling its content as &#8220;elitist b.s.&#8221;, I claim your position is, to be generous, underinformed.  No talks are scheduled ahead of time&#8211; anyone who wishes to speak must convince the attendees that his or her talk is worth attending.  Whoever shows up for the event determines what will be discussed in true democratic style, with every vote counting equally.  I&#8217;m not aware of a more open, less elitist format for a conference. Indeed, even their technical nature is in question from event to event.  Social Media Terrorism and making balloon animals have been among the most popular presentations in the event&#8217;s history.  The contrast with an event featuring a set of invited speakers and curated attendance list should be obvious.   As a community, we should be happy both formats exist here in the city.
+
+I&#8217;m confused by the article&#8217;s conclusion: that these events ought themselves to lead to the incubation of startups.  The tension between the desire for the audience not to &#8220;be pitched&#8221; and to simultaneously result in city-changing startups seems irreconcilable.  Although they do not fit the profile of the events listed in your article, if your readers are looking for startup activity in Charlotte, I&#8217;d direct them to the Twitter accounts <a href="http://twitter.com/CLTLaunch">@CLTLaunch</a> and <a href="http://twitter.com/CollaborateCLT">@CollaborateCLT</a>, which both have practical, hands-on advice for all start-ups as a part of their mission.
+
+Finally, I&#8217;d encourage all Charlotte Magazine readers to attend the events, engage with the speakers, and pitch your own sessions.  Participate in this open discussion about your city&#8217;s future, and you&#8217;ll have an impact.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook and The Washington Post]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/12/26/facebook-and-the-washington-post/"/>
+    <updated>2010-12-26T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/12/26/facebook-and-the-washington-post</id>
+    <content type="html"><![CDATA[<p>
+<img src="http://s-ak.buzzfed.com/static/imagebuzz/terminal01/2010/12/14/9/washington-post-and-facebook-32444-1292336220-2.jpg" />
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Marketrol!]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/12/24/marketrol-2/"/>
+    <updated>2010-12-24T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/12/24/marketrol-2</id>
+    <content type="html"><![CDATA[<a href="http://someguysblog.com/wp-content/uploads/chickenmarketrol1.jpg"><img class="alignnone size-full wp-image-34175" title="chickenmarketrol" src="http://someguysblog.com/wp-content/uploads/chickenmarketrol1.jpg" alt="The world's first self-marketing medication!" width="400" height="400" /></a>Genius.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Internet Age]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/12/24/internet-age/"/>
+    <updated>2010-12-24T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/12/24/internet-age</id>
+    <content type="html"><![CDATA[Would you be shocked?
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Submitted without comment]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/12/10/submitted-without-comment/"/>
+    <updated>2010-12-10T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/12/10/submitted-without-comment</id>
+    <content type="html"><![CDATA[via @dennyabraham
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Vegan Stephen Day!]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/11/27/vegan-stephen-day/"/>
+    <updated>2010-11-27T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/11/27/vegan-stephen-day</id>
+    <content type="html"><![CDATA[<p><a href="http://girlsareprettyforever.blogspot.com/2010/11/vegan-stephen-day.html">Vegan Stephen Day!</a>: &#8220;You trusted a vegan and look what happened. Look at what happens when you trust Vegan Stephen.&#8221;</p>
+
+<p>(Via <a href="http://girlsareprettyforever.blogspot.com/">GIRLS ARE PRETTY</a>.)</p>
+
+<p>I can&#8217;t remember the last time I recommended Girls Are Pretty, so here it is again.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Real Software Engineering - Glenn Vanderburg - Lone Star Ruby Conference 2010]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010/"/>
+    <updated>2010-11-25T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010</id>
+    <content type="html"><![CDATA[<p><a href="http://confreaks.net/videos/282-lsrc2010-real-software-engineering">Real Software Engineering - Glenn Vanderburg - Lone Star Ruby Conference 2010</a>: <blockquote>Software engineering as it’s taught in universities simply doesn’t work. It doesn’t produce software systems of high quality, and it doesn’t produce them for low cost. Sometimes, even when practiced rigorously, it doesn’t produce systems at all.
+
+That’s odd, because in every other field, the term ‘engineering’ is reserved for methods that work.
+
+What then, does real software engineering look like? How can we consistently deliver high-quality systems to our customers and employers in a timely fashion and for a reasonable cost? In this session, we’ll discuss where software engineering went wrong, and build the case that disciplined Agile methods, far from being ‘anti-engineering’ (as they are often described), actually represent the best of engineering principles applied to the task of software development.</blockquote></p>
+
+<p>This is one of the finest talks I&#8217;ve seen in my time going to conferences.  This version was given at the Lone Star Ruby Conference, but I had a chance to see it myself at Ruby Hoedown X in Nashville.  Glenn and I also worked together on the project that brought me to Charlotte, originally.  Thanks, Glenn!</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Boompa.com Launch Postmortem, Part 1: Research, Picking a Team, Office Space and Money || kuro5hin.org]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org/"/>
+    <updated>2010-11-24T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org</id>
+    <content type="html"><![CDATA[<p><a href="http://www.kuro5hin.org/story/2006/5/18/16204/1055">Boompa.com Launch Postmortem, Part 1: Research, Picking a Team, Office Space and Money || kuro5hin.org</a>: &#8220;Who&#8217;s the better shot? Give them the gun.
+
+<blockquote>
+Ethan and I came up with the &#8216;Zombie Team&#8217; test for figuring out whether or not someone is ready to work on an intense project, be it a start-up or otherwise. The test is this: If zombies suddenly sprung from the earth, could you trust the perspective team member to cover your back? Would they tell you if they got bit? Most importantly would you give them the team&#8217;s only gun if you knew they were the better shot? If the answer is no to any of those questions you need to let them get eaten by the cubicle wasteland of corporate culture, because they aren&#8217;t ready for this kind of work.&#8221;
+</blockquote></p>
+
+<p>(Via <a href="http://www.chubbybrain.com/blog/startup-failure-post-mortem/">25 Best Startup Failure Post-Mortems of All Time</a>.)</p>
+
+<p>A great excerpt from a great post.  Go read it, seriously!  As the site no longer resolves, I wonder what became of it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What NoSQL Shouldn't Do]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/11/22/what-nosql-shouldnt-do/"/>
+    <updated>2010-11-22T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/11/22/what-nosql-shouldnt-do</id>
+    <content type="html"><![CDATA[<p><a href="http://cloudeventprocessing.com/2010/11/20/wrong-complex-event-processing/">What NoSQL Shouldn&#8217;t Do</a>: &#8220;The idea was that we were ushering in a New Way To Compute Things.  Like all technologists who spend way too much time thinking about this stuff, we thought everyone would immediately see how smart we were, run out and buy one of the CEP based products, and join is in revolutionizing how data is turned into information and used by business folk to make money and pay our salaries.  The only problem is, we forgot 2 things; 1) who would be using our software to do this work, and 2) who would subsequently be using the applications developed by 1.&#8221;</p>
+
+<p>Does this sound familiar?</p>
+
+<p>via <a href="http://twitter.com/kevsmith/status/6725681937383424">@kevsmith</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[I Need A Dollar]]></title>
+    <link href="http://new.jimvanfleet.com//blog/2010/11/22/i-need-a-dollar/"/>
+    <updated>2010-11-22T00:00:00-05:00</updated>
+    <id>http://new.jimvanfleet.com//blog/2010/11/22/i-need-a-dollar</id>
+    <content type="html"><![CDATA[Whiskey is my friend too, but less so recently.
+]]></content>
+  </entry>
+  
+</feed>
