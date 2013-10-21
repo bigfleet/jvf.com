@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: facebook, | Hello, I'm Jim Van Fleet]]></title>
-  <link href="http://new.jimvanfleet.com/jvf/blog/categories/facebook/atom.xml" rel="self"/>
-  <link href="http://new.jimvanfleet.com/jvf/"/>
-  <updated>2013-10-21T15:21:22-04:00</updated>
-  <id>http://new.jimvanfleet.com/jvf/</id>
+  <link href="http://www.jimvanfleet.com//blog/categories/facebook/atom.xml" rel="self"/>
+  <link href="http://www.jimvanfleet.com//"/>
+  <updated>2013-10-21T15:34:50-04:00</updated>
+  <id>http://www.jimvanfleet.com//</id>
   <author>
     <name><![CDATA[Jim Van Fleet]]></name>
     <email><![CDATA[jim@jimvanfleet.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Facebook OAuth using OmniAuth and Rails 4]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
+    <link href="http://www.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
     <updated>2013-10-21T11:30:00-04:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
+    <id>http://www.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
     <content type="html"><![CDATA[<h2>Allowing Facebook logins in Rails 4</h2>
 
 
@@ -345,7 +345,7 @@ happen there:</p></p>
 &lt;% end %></p>
 
 <p><!--
-<a href="http://new.jimvanfleet.com/jvf/auth/twitter" class="auth_provider">
+<a href="http://www.jimvanfleet.com//auth/twitter" class="auth_provider">
   &lt;%= image_tag &ldquo;twitter_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Twitter&rdquo; %>
   Twitter
 </a>
@@ -354,7 +354,7 @@ happen there:</p></p>
   &lt;%= link_to_function image_tag(&ldquo;facebook_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Facebook&rdquo;), &lsquo;fblogin()&rsquo; %>
 &lt;% end %>
 <!--
-<a href="http://new.jimvanfleet.com/jvf/auth/google_apps" class="auth_provider">
+<a href="http://www.jimvanfleet.com//auth/google_apps" class="auth_provider">
   &lt;%= image_tag &ldquo;google_64.png&rdquo;, :size => &ldquo;64x64&rdquo;, :alt => &ldquo;Google&rdquo; %>
   Google
 </a>

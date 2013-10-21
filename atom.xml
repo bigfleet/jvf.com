@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Hello, I'm Jim Van Fleet]]></title>
-  <link href="http://new.jimvanfleet.com/jvf/atom.xml" rel="self"/>
-  <link href="http://new.jimvanfleet.com/jvf/"/>
-  <updated>2013-10-21T15:21:22-04:00</updated>
-  <id>http://new.jimvanfleet.com/jvf/</id>
+  <link href="http://www.jimvanfleet.com//atom.xml" rel="self"/>
+  <link href="http://www.jimvanfleet.com//"/>
+  <updated>2013-10-21T15:34:50-04:00</updated>
+  <id>http://www.jimvanfleet.com//</id>
   <author>
     <name><![CDATA[Jim Van Fleet]]></name>
     <email><![CDATA[jim@jimvanfleet.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Facebook OAuth using OmniAuth and Rails 4]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
+    <link href="http://www.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
     <updated>2013-10-21T11:30:00-04:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
+    <id>http://www.jimvanfleet.com//blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4</id>
     <content type="html"><![CDATA[<h2>Allowing Facebook logins in Rails 4</h2>
 
 
@@ -667,9 +667,9 @@ graphs via Sidekiq later!)</p></p>
   
   <entry>
     <title type="html"><![CDATA[Charlotte Startup Weekend 3]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/10/19/charlotte-startup-weekend-3/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/10/19/charlotte-startup-weekend-3/"/>
     <updated>2011-10-19T00:00:00-04:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/10/19/charlotte-startup-weekend-3</id>
+    <id>http://www.jimvanfleet.com//blog/2011/10/19/charlotte-startup-weekend-3</id>
     <content type="html"><![CDATA[<p>I haven&#8217;t blogged since the last Startup Weekend in Charlotte!  Must mean it&#8217;s time for another one, as the next Startup Weekend approaches.</p>
 	<p>First is <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend 3</a>, where I am a co-organizer.  You can read our <a href="http://charlotte.startupweekend.org/2011/10/13/announcing-charlotte-startup-weekend-3/">kickoff blog for <span class="caps">CSW3</span></a> on our site.  We also have testimonials from <a href="http://charlotte.startupweekend.org/2011/10/18/technologists-love-charlotte-startup-weekend/">technologists</a> and <a href="http://charlotte.startupweekend.org/2011/10/18/tagseats-a-special-charlotte-startup-weekend-testimonial/">business people</a>.  This is a great event for working on a project for the fun of it, and making friends and connections in the Charlotte startup community at the same time.</p>
 
@@ -688,9 +688,9 @@ graphs via Sidekiq later!)</p></p>
   
   <entry>
     <title type="html"><![CDATA[Charlotte Startup Weekend 2]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/03/30/charlotte-startup-weekend-2/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/03/30/charlotte-startup-weekend-2/"/>
     <updated>2011-03-30T00:00:00-04:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/03/30/charlotte-startup-weekend-2</id>
+    <id>http://www.jimvanfleet.com//blog/2011/03/30/charlotte-startup-weekend-2</id>
     <content type="html"><![CDATA[<p>For those of you who are learning of my existence for the first time, welcome!  I&#8217;m writing today about my involvement with <a href="http://charlotte.startupweekend.org/">Charlotte Startup Weekend 2</a>, but I have to start with some of my own background to help you understand why you should be involved as well.</p>
 
 <p>I came to Charlotte in January of 2008 to pursue my professional passion of working with Ruby on Rails.  I selected a Charlotte startup over one in the Bay Area because I believed in the business.  During our time here, my wife and I have come to love Charlotte deeply, and have made it our home.  I am an advocate for Charlotte, and I&#8217;m also an admirer and exhibitor of its entreprenurial spirit.  After moving here for one Charlotte startup, I&#8217;ve founded or co-founded two others, and joined a fourth as its CTO.</p>
@@ -709,9 +709,9 @@ graphs via Sidekiq later!)</p></p>
   
   <entry>
     <title type="html"><![CDATA[DevOps Culture Hacks | DevOps.com]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/03/10/devops-culture-hacks-devops-com/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/03/10/devops-culture-hacks-devops-com/"/>
     <updated>2011-03-10T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/03/10/devops-culture-hacks-devops-com</id>
+    <id>http://www.jimvanfleet.com//blog/2011/03/10/devops-culture-hacks-devops-com</id>
     <content type="html"><![CDATA[<p><a href="http://devops.com/2011/03/08/devops-culture-hacks/">DevOps Culture Hacks | DevOps.com</a>: &#8220;A turning point for Jesse in terms of moving from an obstacle in the way of change to someone that really knew how to add value with ops practice stemmed from a battle he got into with the ‘VP of Awesome’ at Amazon. This was the nickname of this particular VP because it seemed that pretty much any highly interesting project at Amazon was under this man’s purview. What happened was that Jesse did not want to let out a piece of software because he knew, for sure, that it would bring the site down. The VP overrode him by saying that the site may go down, but the stock price will go up. So, the software went out, and it brought the site down. Two days of firefighting and the site came back up, and so did the stock price, and so did the volume of orders.
 
 The dev team went on and had a party, they were rewarded for job well done, new and profitable functionality released. At the end of the year, Ops got penalized for the outage! Amazon rewarded development for releasing software and providing value and operations was not a part of that. They were in fact penalized for something that was out of their control.&#8221;</p>
@@ -722,9 +722,9 @@ The dev team went on and had a party, they were rewarded for job well done, new 
   
   <entry>
     <title type="html"><![CDATA[Old Days]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/03/04/old-days/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/03/04/old-days/"/>
     <updated>2011-03-04T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/03/04/old-days</id>
+    <id>http://www.jimvanfleet.com//blog/2011/03/04/old-days</id>
     <content type="html"><![CDATA[<p><a href="http://www.savagechickens.com/2011/03/old-days.html">Old Days</a>: &#8221;<p><img title="Old Days" src="http://www.savagechickens.com/wp-content/uploads/chickenyoungagain.jpg" alt="Old Days" width="400" height="632"></p>
 <p>More <a href="http://www.savagechickens.com/tag/nostalgia">nostalgia</a>.</p>&#8221;</p>
 
@@ -734,9 +734,9 @@ The dev team went on and had a party, they were rewarded for job well done, new 
   
   <entry>
     <title type="html"><![CDATA[336 Hours]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/02/08/336-hours/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/02/08/336-hours/"/>
     <updated>2011-02-08T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/02/08/336-hours</id>
+    <id>http://www.jimvanfleet.com//blog/2011/02/08/336-hours</id>
     <content type="html"><![CDATA[In the next two weeks, I expect the following events:
 <ul>
 	<li>I will speak at <a href="http://ignitecharlotte.org">Ignite! Charlotte</a> for a second time, this time in front of a sold-out Neighborhood Theater.</li>
@@ -759,9 +759,9 @@ That&#8217;s in addition to client work and the particulars of every day life.  
   
   <entry>
     <title type="html"><![CDATA[Unqualified Reservations: What's wrong with CS research]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research/"/>
     <updated>2011-02-06T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research</id>
+    <id>http://www.jimvanfleet.com//blog/2011/02/06/unqualified-reservations-whats-wrong-with-cs-research</id>
     <content type="html"><![CDATA[<p><a href="http://unqualified-reservations.blogspot.com/2007/08/whats-wrong-with-cs-research.html">Unqualified Reservations: What&#8217;s wrong with CS research</a>: &#8220;So here&#8217;s the first thing that&#8217;s wrong with CS research: there&#8217;s no such thing as CS research. First, there is no such thing as &#8216;computer science.&#8217; Except for a few performance tests and the occasional usability study, nothing any CS researcher does has anything to do with the Scientific Method. Second, there is no such thing as &#8216;research.&#8217; Any activity which is not obviously productive can be described as &#8216;research.&#8217; The word is entirely meaningless. All just semantics, of course, but it&#8217;s hardly a good sign that even the name is fraudulent.
 
 When we look at what &#8216;CS researchers&#8217; actually do, we see three kinds of people. We can describe them roughly as creative programmers, mathematicians, and bureaucrats.&#8221;</p>
@@ -784,18 +784,18 @@ When we look at what &#8216;CS researchers&#8217; actually do, we see three kind
   
   <entry>
     <title type="html"><![CDATA[National Anthem]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/01/17/national-anthem/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/01/17/national-anthem/"/>
     <updated>2011-01-17T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/01/17/national-anthem</id>
+    <id>http://www.jimvanfleet.com//blog/2011/01/17/national-anthem</id>
     <content type="html"><![CDATA[This was my favorite rendition I can remember.
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Hacker News | That was one of the things that really surprised me about the real world: that b...]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b/"/>
     <updated>2011-01-13T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b</id>
+    <id>http://www.jimvanfleet.com//blog/2011/01/13/hacker-news-that-was-one-of-the-things-that-really-surprised-me-about-the-real-world-that-b</id>
     <content type="html"><![CDATA[<p><a href="http://news.ycombinator.com/item?id=2095406">Hacker News | That was one of the things that really surprised me about the real world: that b&#8230;</a>: 
 
 <p><strong>Nostrademons</strong> writes:</p>
@@ -817,9 +817,9 @@ There&#8217;s this model of the world we&#8217;re taught as schoolkids - at leas
   
   <entry>
     <title type="html"><![CDATA[Ben Rockwood on Devops]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/01/04/ben-rockwood-on-devops/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/01/04/ben-rockwood-on-devops/"/>
     <updated>2011-01-04T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/01/04/ben-rockwood-on-devops</id>
+    <id>http://www.jimvanfleet.com//blog/2011/01/04/ben-rockwood-on-devops</id>
     <content type="html"><![CDATA[<a href="http://www.cuddletech.com/blog/pivot/entry.php?id=1149">The Blog of Ben Rockwood</a>:
 <blockquote>When I first came in contact with the &#8216;Devops&#8217; movement I thought it was about better systems administration, a maturing of the craft. It was, I thought, more about Ops and less about dev. Dev had their day in the sun with Agile&#8230; now sysadmins were getting theirs. Remember, if you can, when Agile came on the scene and how giddy developers got with eXtreme Programming, then Pragmatic Programmer books are everywhere, and then SCRUM comes along, and its all about this &#8216;lets do the old thing, in the new way&#8217; excitement. Re-inventing the craft for a new age. I thought devops was that.</blockquote>
 I&#8217;ve been following Ben for a long time, since he was doing podcasts (ps pipe grep!) with the other <a href="http://joyent.net">Joyent</a> knuckleheads in 2007.  I enjoyed reading this post, although it highlights how wide ranging the term &#8220;Devops&#8221; can be.  My background couldn&#8217;t be more different.  I started by only learning enough system administration to help run the Rails applications I wrote, and now I find myself looking at a trend in the server-side part of the operation that I think is very promising.
@@ -834,9 +834,9 @@ I am a &#8220;smallest team possible&#8221; sort of guy, so I happen to think th
   
   <entry>
     <title type="html"><![CDATA[A Letter to the Editor of Charlotte Magazine]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine/"/>
+    <link href="http://www.jimvanfleet.com//blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine/"/>
     <updated>2011-01-04T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine</id>
+    <id>http://www.jimvanfleet.com//blog/2011/01/04/a-letter-to-the-editor-of-charlotte-magazine</id>
     <content type="html"><![CDATA[Thank you for your coverage of the regional conference scene in Charlotte in your piece &#8221;<a href="http://www.charlottemagazine.com/Charlotte-Magazine/January-2011/Rhetorical-Revolution/">Rhetorical Revolution</a>&#8221;.  This piece touches on some very important areas for the future of Charlotte&#8217;s technology culture.
 
 To critics of BarCamp labelling its content as &#8220;elitist b.s.&#8221;, I claim your position is, to be generous, underinformed.  No talks are scheduled ahead of time&#8211; anyone who wishes to speak must convince the attendees that his or her talk is worth attending.  Whoever shows up for the event determines what will be discussed in true democratic style, with every vote counting equally.  I&#8217;m not aware of a more open, less elitist format for a conference. Indeed, even their technical nature is in question from event to event.  Social Media Terrorism and making balloon animals have been among the most popular presentations in the event&#8217;s history.  The contrast with an event featuring a set of invited speakers and curated attendance list should be obvious.   As a community, we should be happy both formats exist here in the city.
@@ -849,9 +849,9 @@ Finally, I&#8217;d encourage all Charlotte Magazine readers to attend the events
   
   <entry>
     <title type="html"><![CDATA[Facebook and The Washington Post]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/12/26/facebook-and-the-washington-post/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/12/26/facebook-and-the-washington-post/"/>
     <updated>2010-12-26T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/12/26/facebook-and-the-washington-post</id>
+    <id>http://www.jimvanfleet.com//blog/2010/12/26/facebook-and-the-washington-post</id>
     <content type="html"><![CDATA[<p>
 <img src="http://s-ak.buzzfed.com/static/imagebuzz/terminal01/2010/12/14/9/washington-post-and-facebook-32444-1292336220-2.jpg" />
 </p>
@@ -860,36 +860,36 @@ Finally, I&#8217;d encourage all Charlotte Magazine readers to attend the events
   
   <entry>
     <title type="html"><![CDATA[Marketrol!]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/12/24/marketrol-2/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/12/24/marketrol-2/"/>
     <updated>2010-12-24T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/12/24/marketrol-2</id>
+    <id>http://www.jimvanfleet.com//blog/2010/12/24/marketrol-2</id>
     <content type="html"><![CDATA[<a href="http://someguysblog.com/wp-content/uploads/chickenmarketrol1.jpg"><img class="alignnone size-full wp-image-34175" title="chickenmarketrol" src="http://someguysblog.com/wp-content/uploads/chickenmarketrol1.jpg" alt="The world's first self-marketing medication!" width="400" height="400" /></a>Genius.
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Internet Age]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/12/24/internet-age/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/12/24/internet-age/"/>
     <updated>2010-12-24T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/12/24/internet-age</id>
+    <id>http://www.jimvanfleet.com//blog/2010/12/24/internet-age</id>
     <content type="html"><![CDATA[Would you be shocked?
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Submitted without comment]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/12/10/submitted-without-comment/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/12/10/submitted-without-comment/"/>
     <updated>2010-12-10T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/12/10/submitted-without-comment</id>
+    <id>http://www.jimvanfleet.com//blog/2010/12/10/submitted-without-comment</id>
     <content type="html"><![CDATA[via @dennyabraham
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Vegan Stephen Day!]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/11/27/vegan-stephen-day/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/11/27/vegan-stephen-day/"/>
     <updated>2010-11-27T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/11/27/vegan-stephen-day</id>
+    <id>http://www.jimvanfleet.com//blog/2010/11/27/vegan-stephen-day</id>
     <content type="html"><![CDATA[<p><a href="http://girlsareprettyforever.blogspot.com/2010/11/vegan-stephen-day.html">Vegan Stephen Day!</a>: &#8220;You trusted a vegan and look what happened. Look at what happens when you trust Vegan Stephen.&#8221;</p>
 
 <p>(Via <a href="http://girlsareprettyforever.blogspot.com/">GIRLS ARE PRETTY</a>.)</p>
@@ -900,9 +900,9 @@ Finally, I&#8217;d encourage all Charlotte Magazine readers to attend the events
   
   <entry>
     <title type="html"><![CDATA[Real Software Engineering - Glenn Vanderburg - Lone Star Ruby Conference 2010]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010/"/>
     <updated>2010-11-25T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010</id>
+    <id>http://www.jimvanfleet.com//blog/2010/11/25/real-software-engineering-glenn-vanderburg-lone-star-ruby-conference-2010</id>
     <content type="html"><![CDATA[<p><a href="http://confreaks.net/videos/282-lsrc2010-real-software-engineering">Real Software Engineering - Glenn Vanderburg - Lone Star Ruby Conference 2010</a>: <blockquote>Software engineering as it’s taught in universities simply doesn’t work. It doesn’t produce software systems of high quality, and it doesn’t produce them for low cost. Sometimes, even when practiced rigorously, it doesn’t produce systems at all.
 
 That’s odd, because in every other field, the term ‘engineering’ is reserved for methods that work.
@@ -916,9 +916,9 @@ What then, does real software engineering look like? How can we consistently del
   
   <entry>
     <title type="html"><![CDATA[Boompa.com Launch Postmortem, Part 1: Research, Picking a Team, Office Space and Money || kuro5hin.org]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org/"/>
     <updated>2010-11-24T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org</id>
+    <id>http://www.jimvanfleet.com//blog/2010/11/24/boompa-com-launch-postmortem-part-1-research-picking-a-team-office-space-and-money-kuro5hin-org</id>
     <content type="html"><![CDATA[<p><a href="http://www.kuro5hin.org/story/2006/5/18/16204/1055">Boompa.com Launch Postmortem, Part 1: Research, Picking a Team, Office Space and Money || kuro5hin.org</a>: &#8220;Who&#8217;s the better shot? Give them the gun.
 
 <blockquote>
@@ -933,9 +933,9 @@ Ethan and I came up with the &#8216;Zombie Team&#8217; test for figuring out whe
   
   <entry>
     <title type="html"><![CDATA[What NoSQL Shouldn't Do]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/11/22/what-nosql-shouldnt-do/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/11/22/what-nosql-shouldnt-do/"/>
     <updated>2010-11-22T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/11/22/what-nosql-shouldnt-do</id>
+    <id>http://www.jimvanfleet.com//blog/2010/11/22/what-nosql-shouldnt-do</id>
     <content type="html"><![CDATA[<p><a href="http://cloudeventprocessing.com/2010/11/20/wrong-complex-event-processing/">What NoSQL Shouldn&#8217;t Do</a>: &#8220;The idea was that we were ushering in a New Way To Compute Things.  Like all technologists who spend way too much time thinking about this stuff, we thought everyone would immediately see how smart we were, run out and buy one of the CEP based products, and join is in revolutionizing how data is turned into information and used by business folk to make money and pay our salaries.  The only problem is, we forgot 2 things; 1) who would be using our software to do this work, and 2) who would subsequently be using the applications developed by 1.&#8221;</p>
 
 <p>Does this sound familiar?</p>
@@ -946,9 +946,9 @@ Ethan and I came up with the &#8216;Zombie Team&#8217; test for figuring out whe
   
   <entry>
     <title type="html"><![CDATA[I Need A Dollar]]></title>
-    <link href="http://new.jimvanfleet.com/jvf/blog/2010/11/22/i-need-a-dollar/"/>
+    <link href="http://www.jimvanfleet.com//blog/2010/11/22/i-need-a-dollar/"/>
     <updated>2010-11-22T00:00:00-05:00</updated>
-    <id>http://new.jimvanfleet.com/jvf/blog/2010/11/22/i-need-a-dollar</id>
+    <id>http://www.jimvanfleet.com//blog/2010/11/22/i-need-a-dollar</id>
     <content type="html"><![CDATA[Whiskey is my friend too, but less so recently.
 ]]></content>
   </entry>
