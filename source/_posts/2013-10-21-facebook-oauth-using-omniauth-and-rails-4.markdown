@@ -24,6 +24,13 @@ ultimately the connection is made on the server-side.</p>
 <p>You don't necessarily have to be using Devise, but if you're not, our tips
 about how to leverage this approach for Facebook login may not be helpful.</p>
 
+<p>With a little extra work, you can allow users that have attached their
+Facebook account to log in with Facebook.  You might even be able to adapt this
+approach to allowing users to create accounts with a single click.  But you
+won't like that as much when you want to get Twitter involved, since Twitter
+doesn't send an email address in its OAuth callback.  It's best to have existing
+users affiliate their accounts and then providing login as a convenience.</p>
+
 <h3>Getting started</h3>
 
 <span class="step">Step 1: Installing gems</span>
@@ -177,7 +184,8 @@ end
 ```
 
 <p>Be sure to also add <code>has_many :authentications</code> to your
-<code>app/models/user.rb</code> file.</p>
+<code>app/models/user.rb</code> file.  And don't forget to run your database
+migrations here!</p>
 
 <span class="step">Step 2: Create the authentication user interface</span>
 
@@ -253,7 +261,8 @@ function fblogin() {
 };
 ```
 <p>Copy this view file into place, as the bulk of our tutorial actions will
-happen there:</p>
+happen there.  There are HTML comment blocks below-- my blog assumes I want a
+hyphen, when I really do want two dashes.  Be sure the file matches <a href="https://gist.github.com/bigfleet/7088190">this gist</a>. </p>
 
 ```erb app/views/authentications/index.html.erb
 <% if @authentications %>
@@ -360,8 +369,10 @@ happen there:</p>
 
 <span class="step">Step 3: Putting it all together</span>
 
-<p>Your route file should contain a trace of the authentications you plan on
-dealing with:</p>
+<p>First, the above step created some cruft in your routes that will make you
+unhappy later.  Remove the line that says <code>get
+"authentications#index"</code> from your routing file.  Your route file should contain 
+a trace of the authentications you plan on dealing with.  Use this snippet:</p>
 
 ```ruby config/routes.rb
   resources :authentications
@@ -369,6 +380,8 @@ dealing with:</p>
   match 'auth/:provider/callback', to: 'authentications#create', via: [:get, :post]
   match 'auth/failure', to: redirect('/'), via: [:get, :post]
 ```
+
+
 
 <p>Ensure that your Facebook JavaScript is loaded into the asset pipeline:</p>
 
@@ -420,6 +433,7 @@ graphs via Sidekiq later!)</p>
 <p>The amazing RailsCasts series provided not <a href="http://railscasts.com/episodes/235-omniauth-part-1">one</a> but <a href="http://railscasts.com/episodes/360-facebook-authentication">two</a> pieces of this finished puzzle.  Thanks, Ryan!</p>
 
 <p>This StackOverflow post on <a href="http://stackoverflow.com/questions/11597130/omniauth-facebook-keeps-reporting-invalid-credentials">invalid_credentials in Omniauth-facebook</a> pointed out the need to use a particular omniauth-facebook release.  Another StackOverflow post pointed out the need to <a href="http://stackoverflow.com/questions/12370056/omniauth-strategies-facebook-noauthorizationcodeerror-must-pass-either-a-code">send a signed_request parameter with the GET to the Facebook SDK</a>.  That's incorporated into the above JavaScript.</p>
+
 
 
 
