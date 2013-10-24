@@ -4,7 +4,7 @@
   <title><![CDATA[Category: omniauth | Hello, I'm Jim Van Fleet]]></title>
   <link href="http://www.jimvanfleet.com//blog/categories/omniauth/atom.xml" rel="self"/>
   <link href="http://www.jimvanfleet.com//"/>
-  <updated>2013-10-21T15:34:50-04:00</updated>
+  <updated>2013-10-24T08:34:42-04:00</updated>
   <id>http://www.jimvanfleet.com//</id>
   <author>
     <name><![CDATA[Jim Van Fleet]]></name>
@@ -46,6 +46,16 @@ ultimately the connection is made on the server-side.</p>
 
 <p>You don't necessarily have to be using Devise, but if you're not, our tips
 about how to leverage this approach for Facebook login may not be helpful.</p>
+
+
+
+
+<p>With a little extra work, you can allow users that have attached their
+Facebook account to log in with Facebook.  You might even be able to adapt this
+approach to allowing users to create accounts with a single click.  But you
+won't like that as much when you want to get Twitter involved, since Twitter
+doesn't send an email address in its OAuth callback.  It's best to have existing
+users affiliate their accounts and then providing login as a convenience.</p>
 
 
 
@@ -227,7 +237,8 @@ end
 ```</p>
 
 <p><p>Be sure to also add <code>has_many :authentications</code> to your
-<code>app/models/user.rb</code> file.</p></p>
+<code>app/models/user.rb</code> file.  And don&rsquo;t forget to run your database
+migrations here!</p></p>
 
 <p><span class="step">Step 2: Create the authentication user interface</span></p>
 
@@ -318,7 +329,8 @@ xfbml      : true  // parse XFBML
 };
 ```
 <p>Copy this view file into place, as the bulk of our tutorial actions will
-happen there:</p></p>
+happen there.  There are HTML comment blocks below&mdash; my blog assumes I want a
+hyphen, when I really do want two dashes.  Be sure the file matches <a href="https://gist.github.com/bigfleet/7088190">this gist</a>. </p></p>
 
 <p>```erb app/views/authentications/index.html.erb
 &lt;% if @authentications %>
@@ -428,8 +440,10 @@ happen there:</p></p>
 
 <p><span class="step">Step 3: Putting it all together</span></p>
 
-<p><p>Your route file should contain a trace of the authentications you plan on
-dealing with:</p></p>
+<p><p>First, the above step created some cruft in your routes that will make you
+unhappy later.  Remove the line that says <code>get
+&ldquo;authentications#index&rdquo;</code> from your routing file.  Your route file should contain
+a trace of the authentications you plan on dealing with.  Use this snippet:</p></p>
 
 <p>```ruby config/routes.rb
   resources :authentications</p>
