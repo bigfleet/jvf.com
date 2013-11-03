@@ -128,6 +128,61 @@
 
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2004/07/21/you-re-fired/">You&#8217;re Fired</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-07-21T00:00:00-04:00" pubdate data-updated="true">Jul 21<span>st</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve never really had that much of a problem with keeping the mapping files seperately.  If you&#8217;re making a change to a domain object, I can&#8217;t imagine even a fairly ignorant developer failing to update the mapping file.  Even then, the problem would quickly bubble to the surface for them.</p>
+
+<p>Also, take a look at <a href="http://www.hibernate.org/102.html">this description</a> of the different phases of round-trip development using Hibernate.  I&#8217;m certainly not of the opinion that schema-to-code or mapping-to-code generation are viable in the long term.  While you may have certain objects that are &#8220;value&#8221; objects in your domain, the entire point of OO programming is to encapsulate state <strong>and</strong> behavior in the same place.  Good luck keeping the methods you write intact out in the wild if you&#8217;re automatically generating your domain object code!</p>
+
+<p>And since the mapping-to-schema connection is quite natural, since I&#8217;m not doing anything but <a href="http://www.site.uottawa.ca:4321/oose/index.html#greenfielddevelopment">green field</a> work, there&#8217;s no question which direction I&#8217;ll be going.  So it all comes down to whether or not XDoclet can do everything that I&#8217;d like in terms of generating a mapping.  While it may be able to, <strong>is it worth learning how?</strong>  You can hand-write Hibernate mapping files easily and exactly to specification.  I just don&#8217;t see that XDoclet is worth it for Hibernate.  I&#8217;m sure <span class="caps">EJB</span> will keep it alive, but I&#8217;m headed back to manual generation of mappings for my next project.</p>
+</div>
+  
+  
+
+
+</div>
+
+      </article>
+    
+    
+      <article class="span4">
+        <div class="article-format">
+
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2004/07/20/long-time-no-post/">Long Time No Post</a></h1>
     
     
@@ -690,73 +745,6 @@
 
       </article>
     
-    
-      <article class="span4">
-        <div class="article-format">
-
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2004/06/09/an-unclothed-experience/">An Unclothed Experience</a></h1>
-    
-    
-      <p class="meta">
-        
-  
-
-
-  
-    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
-  
-
- - 
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2004-06-09T00:00:00-04:00" pubdate data-updated="true">Jun 9<span>th</span>, 2004</time> - 
-        
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I plan on using Naked Objects for rapid prototyping.  Now that I know how to produce a &#8220;working&#8221; domain model using the framework, I feel that it will be an excellent tool that I actually will use on my next project.  I am <strong>not</strong> going to use Naked Objects in the delivered product.  These notes are geared towards developers who have similar plans.</p>
-
-<h2>The Interface Is The Output</h2>
-
-<p>First, do <strong>not</strong> write your business object interfaces first.  It may seem natural to do so, then grow the interface and the Naked Object implementation together.  That&#8217;s what I actually did.  What a pain!</p>
-
-<p>The rub is that the Naked Objects framework actually uses wrappers around Strings, floats, ints, and the Collections interface.  While implementing the interface is trivial for the primitive wrappers, it&#8217;s not immediately apparent how to implement the methods that would return a <span class="inlineCode">List</span>, for example.  Since the point is rapid prototyping, just start with the basics.  We&#8217;re going to throw this code away, essentially, so why spend time poking in innards?</p>
-
-<p>We&#8217;re also in a period where we expect frequent, massive change to the domain model.  Without implementing the interface, you can aspire to real-time edits and allowing the business customer to see the effects their changes have on the model.  If you treat the interface to the business objects as the output, you get all the benefits of Naked Objects without sacrificing anything truly worthwhile.</p>
-
-<h2>Notes</h2>
-
-<ul>
-<li>The documentation is in an interesting state.  First, the tutorial serves as an excellent walkthrough.  There was no information I needed that wasn&#8217;t in the original package, <strong>except</strong> for the fact that you no longer need the two separate icons.</li>
-<li>While the wrapping of values and collections seems a little odd, I consider it an extremely small price to pay to get that UI up and running.</li>
-<li>It&#8217;d be interesting to see a more involved system than the one I produced.  Mostly, I&#8217;m just fascinated by the concept that this framework could be used directly in a deliverable.  Can users really do it?  Can it possibly be for everyone?</li>
-</ul>
-</div>
-  
-  
-
-
-</div>
-
-      </article>
-    
     </div>
       <div class="row">
         <ul class="pager">
@@ -784,6 +772,10 @@
     <ul class="recent_posts">
       
         <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
         </li>
       
@@ -797,10 +789,6 @@
       
         <li>
           <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/03/04/old-days/">Old Days</a>
         </li>
       
     </ul>

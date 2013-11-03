@@ -128,6 +128,130 @@
 
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2005/12/13/freebsd-workstation-set-up/">FreeBSD Workstation Set Up</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2005-12-13T00:00:00-05:00" pubdate data-updated="true">Dec 13<span>th</span>, 2005</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Before We Begin</h2>
+
+
+	<p>The point of this lesson is to get you on your feet in an X environment; the basis of any workstation.  You&#8217;ll get an introduction to the ports system and see what it&#8217;s like to use it.  I include a couple of tips for ordering your port installation and a few examples of ports that I&#8217;ve installed at the end.</p>
+
+
+	<h2> Ports, Explained</h2>
+
+
+	<p>In the <a href="http//blah/">last lesson</a>, we covered installing the ports system using <span class="caps">CVSUP</span>.  Ports is the package management system for FreeBSD.  It&#8217;s highly dependent on source code compilation, so it&#8217;s not for the impatient.  However, the ports system has high standard for a &#8220;non-broken&#8221; port, and the maintainers of any given port are given continuous feedback for circumstances that &#8220;break&#8221; the port.  As a result, you can use ports without being that comfortable with many of the major compilation issues and strategies;  odds are that it will <em>just work</em>.</p>
+
+
+	<h2> Using the ports system.</h2>
+
+
+	<p>The first step I took with my newly installed system was to log in as root and&#8230;</p>
+
+
+<code>
+<pre>
+# cd /usr/ports/x11-servers/xorg-server/
+# make install clean
+</pre>
+</code>
+
+	<p>That&#8217;s it.  Let that run, and eventually you will have an X server running.  The ports system itself will walk the necessary dependency chains, installing other ports as needed.</p>
+
+
+	<h2> Interlude: configuration and <code>rehash</code></h2>
+
+
+	<p>After the above command has completed, issue the <code>rehash</code> command.  Essentially, this tells FreeBSD to go back and re-evaluate your <span class="caps">PATH</span>, giving you access to any newly installed programs.  In this case, you&#8217;ve picked up <code>xorgconfig</code>, which you should now run.</p>
+
+
+	<h2> Getting a bit tricky</h2>
+
+
+Ports evaluate dependency chains as best it can, but it&#8217;s not a perfect system.  For example, if we were to&#8230;
+<code><pre>
+# cd /usr/ports/x11-wm/gnome2
+</pre></code>
+we could <code>make install clean</code> immediately, but let&#8217;s say we were going to sleep after issuing that command.  During the middle of the night, this command would end up blocking on configuration choices for the <code>ghostscript</code> port.
+
+	<p>So you don&#8217;t wake up to yummy Gnome!  The answer, in this case, is to install the <code>print/ghostscript-gpl</code> port first (which doesn&#8217;t take very long) then start gnome.</p>
+
+
+	<p>(KDE, by the way, blocks on at least a half-dozen dependencies. <code>artswrapper, postgres-client (?!?), openslp, kdegraphics, kdemultimedia, kdepim, and boost-python</code>)</p>
+
+
+	<p>There are ways to have these preferences taken into account without having them come up directly in the <code>make</code> process, but I&#8217;m still experimenting with the alternatives and trying to figure out how some of the tricky stuff works.  I&#8217;ll be happy to leave an update when I crack the case.</p>
+
+
+	<h2>Recommended Ports</h2>
+
+
+	<ul>
+	<li>Firefox (www/firefox)</li>
+		<li>OpenOffice.Org v.2 (editors/openoffice-2.0)
+ Gnome (x11-wm/gnome2)
+(although gnome2-lite looks interesting&#8230;)</li>
+		<li>lighttpd (www/lighttpd)</li>
+		<li>Ruby (devel/ruby18)</li>
+		<li>Subversion (devel/subversion)</li>
+		<li>tsclient (net/tsclient) This program handles <span class="caps">RDP</span> connections to Windows machines and <span class="caps">VNC</span> connections to others.  Beats both gdesktop and kdesktop.</li>
+		<li>Trac (www/trac)</li>
+		<li>Gimp (graphics/gimp)</li>
+		<li>Gaim (net-im/gaim)</li>
+	</ul>
+
+
+	<h2>What&#8217;s Next?</h2>
+
+
+	<p>The Java ports.  FreeBSD&#8217;s support for Java might seem intimidating, but it&#8217;s not so bad, as long as you can live with 1.4.  You can still run Eclipse, and a lot of Java programs on the 1.4 <span class="caps">JDK</span>.</p>
+</div>
+  
+  
+
+
+</div>
+
+      </article>
+    
+    
+      <article class="span4">
+        <div class="article-format">
+
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2005/12/12/installing-freebsd-stable/">Installing FreeBSD-STABLE</a></h1>
     
     
@@ -676,75 +800,6 @@
 
       </article>
     
-    
-      <article class="span4">
-        <div class="article-format">
-
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2005/11/15/the-journey-begins/">The Journey Begins</a></h1>
-    
-    
-      <p class="meta">
-        
-  
-
-
-  
-    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
-  
-
- - 
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2005-11-15T00:00:00-05:00" pubdate data-updated="true">Nov 15<span>th</span>, 2005</time> - 
-        
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So, I want to run different operating systems on the <a href="http://blog.jimvanfleet.com/articles/2005/11/12/the-dawn-of-a-new-day">new Dell</a> I just got.  I am a technical person who hasn&#8217;t done so much installing of Linux or FreeBSD that I can just fly through it.  I&#8217;m sure people like that exist, judging on messages I see on the forums, but one has to start somewhere.</p>
-
-
-	<p>My goal with this series is to write a guide for the new Dell owner to get started running other operating systems and to document my own progress with this effort.  Since my choice of FreeBSD entails several steps where a lot of waiting is involved, I thought it might also be a good way to spend some of the downtime.</p>
-
-
-	<h3> Before We Get Started</h3>
-
-
-	<p>I&#8217;m installing alternative, open-source operating systems.  I&#8217;m prepared to do some research, and to try different things in an effort to solve my own problems.  At times, however, I find the breadth of two areas staggering: the domain of potential problems that can be encountered when either installing or using an open-source OS, and the set of choices one can make once an open-source OS is chosen.  There are almost limitless configurations of a single OS,  without mention of choosing between several different ones.</p>
-
-
-	<p>With the size of these sets in mind, in conjunction with the other demands on my time, I am hereby instituting what I&#8217;ll call the <strong>Ten Minute Dead End Rule</strong>, or <span class="caps">TMDER</span> for short.  I am not really sensitive to the length of time required to solve a problem.  I&#8217;ll compile source all week until I get it right if I feel confident that I&#8217;m learning something.  What I am sensitive to is the feeling that I&#8217;m doing a lot of reading, but getting nowhere, or jabbing at configuration files and having no discernable effect whatsoever.</p>
-
-
-	<p>If I invoke <span class="caps">TMDER</span>, I may return to a dead end if I find no other alternative.</p>
-
-
-	<p>My post about the first step is almost ready, stay tuned!</p>
-</div>
-  
-  
-
-
-</div>
-
-      </article>
-    
     </div>
       <div class="row">
         <ul class="pager">
@@ -772,6 +827,10 @@
     <ul class="recent_posts">
       
         <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
         </li>
       
@@ -785,10 +844,6 @@
       
         <li>
           <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/03/04/old-days/">Old Days</a>
         </li>
       
     </ul>

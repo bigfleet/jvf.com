@@ -128,6 +128,68 @@
 
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2004/05/18/screaming-headless-servers/">Screaming Headless Servers</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-05-18T00:00:00-04:00" pubdate data-updated="true">May 18<span>th</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Problem</h2>
+<p>
+If you&#8217;re working with a server-side application, like I am, that imports a <pre>javax.swing</pre> package, you might get strange errors, such as the one described <a href="https://sourceforge.net/forum/message.php?msg_id=2545939">here</a>.  <pre>javax.swing</pre> packages expect to find an <a href="http://www.xfree86.org/"><span class="caps">X11</span> server</a> running on the machine.  In my case, it wants to access the graphical subsystem because <a href="http://www.jfree.org/">JFreeReport</a> wants to use a <pre>TableModel</pre> as a kind of spreadsheet.
+
+<h2>Solution</h2>
+
+<p>append <pre>java.awt.headless=true</pre> to your <pre>JAVA_OPTS&lt;pre&gt; in catalina.sh.  Mine ended up looking like this.&lt;/p&gt;
+
+&lt;pre&gt;
+JAVA_OPTS=-Dsalmon.props.path=/home/opgi/bin/jakarta-tomcat-4.1.30/salmon/properties
+JAVA_OPTS = "$JAVA_OPTS -Djava.awt.headless=true"
+&lt;/pre&gt;
+</div>
+  
+  
+
+
+</div>
+
+      </article>
+    
+    
+      <article class="span4">
+        <div class="article-format">
+
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2004/05/18/back-from-nfjs/">Back From NFJS</a></h1>
     
     
@@ -315,7 +377,7 @@ I don&#8217;t anticipate leaving <span class="caps">SOFIA</span> any time soon; 
 
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2004/05/10/like-a-squirrel/">Like a Squirrel&#8230;</a></h1>
+      <h1 class="entry-title"><a href="/blog/2004/05/10/like-a-squirrel/">Like a Squirrel...</a></h1>
     
     
       <p class="meta">
@@ -630,57 +692,6 @@ I don&#8217;t anticipate leaving <span class="caps">SOFIA</span> any time soon; 
 
       </article>
     
-    
-      <article class="span4">
-        <div class="article-format">
-
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2004/04/30/quickie-software-design-illustrated/">Quickie: Software Design Illustrated</a></h1>
-    
-    
-      <p class="meta">
-        
-  
-
-
-  
-    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
-  
-
- - 
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2004-04-30T00:00:00-04:00" pubdate data-updated="true">Apr 30<span>th</span>, 2004</time> - 
-        
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Check out a wonderful summary of a design process <a title="project.jpg (JPEG Image, 800x600 pixels) - Scaled (98%)" href="http://777-team.org/tmp/project.jpg">here.</a></p>
-</div>
-  
-  
-
-
-</div>
-
-      </article>
-    
     </div>
       <div class="row">
         <ul class="pager">
@@ -708,6 +719,10 @@ I don&#8217;t anticipate leaving <span class="caps">SOFIA</span> any time soon; 
     <ul class="recent_posts">
       
         <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
         </li>
       
@@ -721,10 +736,6 @@ I don&#8217;t anticipate leaving <span class="caps">SOFIA</span> any time soon; 
       
         <li>
           <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/03/04/old-days/">Old Days</a>
         </li>
       
     </ul>

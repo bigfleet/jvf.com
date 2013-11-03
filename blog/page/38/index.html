@@ -128,6 +128,57 @@
 
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2004/08/15/ugh/">Ugh!</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2004-08-15T00:00:00-04:00" pubdate data-updated="true">Aug 15<span>th</span>, 2004</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m going to be taking my first sick day in something like a year tomorrow.  I caught a stomach bug this weekend and it&#8217;s been messing me up.</p>
+</div>
+  
+  
+
+
+</div>
+
+      </article>
+    
+    
+      <article class="span4">
+        <div class="article-format">
+
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2004/08/09/one-love/">One Love</a></h1>
     
     
@@ -726,61 +777,6 @@ one love</p>
 
       </article>
     
-    
-      <article class="span4">
-        <div class="article-format">
-
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2004/07/21/you-re-fired/">You&#8217;re Fired</a></h1>
-    
-    
-      <p class="meta">
-        
-  
-
-
-  
-    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
-  
-
- - 
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2004-07-21T00:00:00-04:00" pubdate data-updated="true">Jul 21<span>st</span>, 2004</time> - 
-        
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve never really had that much of a problem with keeping the mapping files seperately.  If you&#8217;re making a change to a domain object, I can&#8217;t imagine even a fairly ignorant developer failing to update the mapping file.  Even then, the problem would quickly bubble to the surface for them.</p>
-
-<p>Also, take a look at <a href="http://www.hibernate.org/102.html">this description</a> of the different phases of round-trip development using Hibernate.  I&#8217;m certainly not of the opinion that schema-to-code or mapping-to-code generation are viable in the long term.  While you may have certain objects that are &#8220;value&#8221; objects in your domain, the entire point of OO programming is to encapsulate state <strong>and</strong> behavior in the same place.  Good luck keeping the methods you write intact out in the wild if you&#8217;re automatically generating your domain object code!</p>
-
-<p>And since the mapping-to-schema connection is quite natural, since I&#8217;m not doing anything but <a href="http://www.site.uottawa.ca:4321/oose/index.html#greenfielddevelopment">green field</a> work, there&#8217;s no question which direction I&#8217;ll be going.  So it all comes down to whether or not XDoclet can do everything that I&#8217;d like in terms of generating a mapping.  While it may be able to, <strong>is it worth learning how?</strong>  You can hand-write Hibernate mapping files easily and exactly to specification.  I just don&#8217;t see that XDoclet is worth it for Hibernate.  I&#8217;m sure <span class="caps">EJB</span> will keep it alive, but I&#8217;m headed back to manual generation of mappings for my next project.</p>
-</div>
-  
-  
-
-
-</div>
-
-      </article>
-    
     </div>
       <div class="row">
         <ul class="pager">
@@ -808,6 +804,10 @@ one love</p>
     <ul class="recent_posts">
       
         <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
         </li>
       
@@ -821,10 +821,6 @@ one love</p>
       
         <li>
           <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/03/04/old-days/">Old Days</a>
         </li>
       
     </ul>

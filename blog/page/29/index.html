@@ -128,6 +128,57 @@
 
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2005/02/22/the-gubmint/">The Gubmint</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2005-02-22T00:00:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2005</time> - 
+        
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At least they got one thing right: <a title="Paper Abstract" href="http://www.nsa.gov/selinux/papers/inevit-abs.cfm">security  in most modern operating systems is a myth</a>.</p>
+</div>
+  
+  
+
+
+</div>
+
+      </article>
+    
+    
+      <article class="span4">
+        <div class="article-format">
+
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2005/02/22/i-am-so-sold/">I Am So Sold</a></h1>
     
     
@@ -607,60 +658,6 @@ $ find . -name .svn -exec rm -rf '{}' \;
 
       </article>
     
-    
-      <article class="span4">
-        <div class="article-format">
-
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2005/02/07/disabling-commons-logging/">Disabling Commons Logging</a></h1>
-    
-    
-      <p class="meta">
-        
-  
-
-
-  
-    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
-  
-
- - 
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2005-02-07T00:00:00-05:00" pubdate data-updated="true">Feb 7<span>th</span>, 2005</time> - 
-        
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve developed a suite of test cases for my latest application.  In my architecture, I want to make sure that each of the implementations for each of my interfaces passes the test cases as part of the build process.  I accomplish this goal using Spring configuration and a little property file maintainance.</p>
-
-
-	<p>As a result, however, following the unit test execution was absolutely impossible.  Thanks to <a title="Spring Framework :: View topic - Dealing with XML config maintenance" href="http://forum.springframework.org/viewtopic.php?t=2592&#38;highlight=disable log">this post</a> on the Spring forum, I discovered the key to disabling commons-logging is to set a system property.  It was a slam-dunk after that to <a href="http://blog.ideoplex.com/software/2003/07/11.html">change a system property using Ant</a>.  Fortunately, the JUnit Ant task accepts this property!</p>
-</div>
-  
-  
-
-
-</div>
-
-      </article>
-    
     </div>
       <div class="row">
         <ul class="pager">
@@ -688,6 +685,10 @@ $ find . -name .svn -exec rm -rf '{}' \;
     <ul class="recent_posts">
       
         <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
         </li>
       
@@ -701,10 +702,6 @@ $ find . -name .svn -exec rm -rf '{}' \;
       
         <li>
           <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/03/04/old-days/">Old Days</a>
         </li>
       
     </ul>

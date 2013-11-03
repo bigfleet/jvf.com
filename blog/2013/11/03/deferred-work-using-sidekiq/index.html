@@ -1,0 +1,775 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Deferred Work Using Sidekiq - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="As we&rsquo;ve discussed at certain points in the past, user experience is extremely
+important, and back-end developers have a lot to do with that &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="Deferred Work Using Sidekiq" />
+  <meta name="og:description" content="As we&rsquo;ve discussed at certain points in the past, user experience is extremely
+important, and back-end developers have a lot to do with that &hellip;" />
+  <meta name="og:url" content="http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq/"/>
+  <meta name="url" content="http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq/">
+  
+  <meta name="subject" content="lpca"/>
+  <meta name="category" content="lpca"/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:www.jimvanfleet.com/" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">Deferred Work Using Sidekiq</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-03T11:46:00-05:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time> - 
+        
+
+posted in
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/lpca/'>lpca</a>
+  
+</span>
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As we&rsquo;ve discussed at certain points in the past, user experience is extremely
+important, and back-end developers have a lot to do with that as well.  Many
+users can deal with &lsquo;ugly&rsquo; if the interface is clear, but no one on Earth likes
+slow!  We&rsquo;ll look at how to take needed work out of the request/response cycle
+in this exercise.</p>
+
+<h2>Step 0</h2>
+
+<p>We&rsquo;ll be revisiting the <a href="https://github.com/itsbspoke/aitfc">house project</a> with
+this exercise.  I&rsquo;ve merged the work that we&rsquo;ve accomplished into master, so
+that you&rsquo;ll be able to either update your forks, or pull the changes down
+locally.</p>
+
+<p>What&rsquo;s that, you <em>weren&rsquo;t</em> working on a branch when you made your changes, and you
+can&rsquo;t apply my changes quickly?</p>
+
+<p>If you have made changes on master that are now irrelevant, try issuing these
+commands:</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git commit -a -m <span class="s2">&quot;Saving my work, just in case&quot;</span>
+</span><span class='line'>git checkout -b save-my-work
+</span><span class='line'>git branch -D master
+</span><span class='line'>git checkout -b master -t origin/master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That should get you ready to work again.  But create branches when you start
+working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b friend-graph-sidekiq
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step 1</h2>
+
+<p>Add these files to your Gemfile:</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;koala&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.8.0rc1&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sidekiq&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># add this in the test group</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;mocha&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s1">&#39;mocha/api&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Install them.  You should know how by now!  Ask a neighbor if you don&rsquo;t.</p>
+
+<h2>Step 2</h2>
+
+<p>Put these contents in spec/models/social_connection_spec.rb</p>
+
+<figure class='code'><figcaption><span>spec/models/social_connection_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">SocialConnection</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;validation&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">subject</span><span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:social_connection</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span><span class="p">{</span> <span class="n">should</span> <span class="n">be_valid</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should require a user&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">build</span><span class="p">(</span><span class="ss">:social_connection</span><span class="p">,</span> <span class="ss">user</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">should_not</span> <span class="n">be_valid</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should require a provider&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">build</span><span class="p">(</span><span class="ss">:social_connection</span><span class="p">,</span> <span class="ss">provider</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">should_not</span> <span class="n">be_valid</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should require a uid&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">build</span><span class="p">(</span><span class="ss">:social_connection</span><span class="p">,</span> <span class="ss">uid</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">should_not</span> <span class="n">be_valid</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;associations&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should be present on user&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">build</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:social_connections</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;Facebook&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">){</span> <span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;interface&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">subject</span><span class="p">{</span> <span class="no">FacebookInterface</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should_not</span> <span class="n">be_nil</span><span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should</span> <span class="n">be_a</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="p">)}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;usage&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:fbi</span><span class="p">){</span> <span class="no">FacebookInterface</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will give you a spec to pass!  Run your specs with either:</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>guard start -i
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rake spec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>if you know that guard isn&rsquo;t working for you.</p>
+
+<p>To pass this test, you&rsquo;ll need to:</p>
+
+<ul>
+<li>create a model with the right fields and types</li>
+<li>add the proper associations throughout the domain</li>
+<li>add validations to the class you create</li>
+</ul>
+
+
+<p>If you&rsquo;d like a hint, download <a href="https://gist.github.com/bigfleet/7292464#file-social_connections-rb">this file</a> into
+<code>spec/factories/social_connections.rb</code>, or simply refer to it inline.</p>
+
+<p>Our goal with this step is to create a record that allows us to keep track of
+some basic information for social connections on the part of our users.  When
+you have this spec passing, you have the domain layer ready!  Now let&rsquo;s proceed
+to the integration.</p>
+
+<h2>Step 3</h2>
+
+<p>Place this file in <code>spec/support/facebook_interface.rb</code>.</p>
+
+<figure class='code'><figcaption><span>spec/support/facebook_interface.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FacebookInterface</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">StubInterface</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">friends</span>
+</span><span class='line'>      <span class="o">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;James Schaffer&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;11670&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Brian O&#39;Malley&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;615125&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Greg Staff&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1507686&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Katherine McNerney&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1530325&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Joel Bonasera&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1905046&quot;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Denny Abraham&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1911249&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">friend_detail</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;id&quot;</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;James Schaffer&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;first_name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;James&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;last_name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Schaffer&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;link&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;https://www.facebook.com/jas.schaffer&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;username&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;jas.schaffer&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;gender&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;male&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;locale&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;updated_time&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;2013-09-23T02:08:44+0000&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">FacebookInterface</span><span class="o">.</span><span class="n">stubs</span><span class="p">(</span><span class="ss">:for</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Place this file in <code>spec/support/sidekiq.rb</code></p>
+
+<figure class='code'><figcaption><span>spec/support/sidekiq.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sidekiq/testing&#39;</span>
+</span><span class='line'><span class="ss">Sidekiq</span><span class="p">:</span><span class="ss">:Testing</span><span class="o">.</span><span class="n">fake!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, place this spec in place in
+<code>spec/models/facebook_friend_worker_spec.rb</code>:</p>
+
+<figure class='code'><figcaption><span>spec/models/facebook_friend_worker_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">FacebookFriendWorker</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">subject</span><span class="p">{</span> <span class="no">FacebookFriendWorker</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">it</span> <span class="s2">&quot;should include the line &#39;include Sidekiq::Worker&#39;&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">subject</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:jid</span><span class="p">)</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s2">&quot;when processing friends&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@user</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s2">&quot;should save all friends&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="nb">lambda</span><span class="p">{</span> <span class="n">subject</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="p">}</span><span class="o">.</span><span class="n">should</span> <span class="n">change</span><span class="p">(</span><span class="no">SocialConnection</span><span class="p">,</span> <span class="ss">:count</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span>  <span class="s2">&quot;attribute saving&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">subject</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>        <span class="vi">@friend</span> <span class="o">=</span> <span class="no">SocialConnection</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">uid</span><span class="p">:</span> <span class="s2">&quot;1905046&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;should store uid&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="vi">@friend</span><span class="o">.</span><span class="n">should_not</span> <span class="n">be_nil</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;should save provider&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="vi">@friend</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">&quot;facebook&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;should store name&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="vi">@friend</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="s2">&quot;Joel Bonasera&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;should be bidirectional&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="vi">@friend</span><span class="o">.</span><span class="n">follower</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="kp">true</span>
+</span><span class='line'>        <span class="vi">@friend</span><span class="o">.</span><span class="n">follows</span><span class="o">.</span><span class="n">should</span> <span class="o">==</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will give you the next spec to run.  This will test that you can progress
+through the Facebook API response, and save the results to the DB in the
+appropriate manner.</p>
+
+<p>It&rsquo;s customary to create an <code>app/workers</code> directory to place your
+<code>FacebookFriendWorker</code>, as well as any other background workers that
+you create.  So the code that you write to pass this test should go in
+<code>app/workers/facebook_friend_worker.rb</code>.</p>
+
+<p>When your specs are passing here, we&rsquo;ve added the ability to defer work outside
+of the request/response cycle.  We&rsquo;re most of the way to seeing this work!</p>
+
+<h2>Step 4</h2>
+
+<p><strong>Add</strong> this spec to your <code>spec/models/authentication_spec.rb</code> file:</p>
+
+<figure class='code'><figcaption><span>spec/models/authentication_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">context</span> <span class="s2">&quot;saving Facebook auths&quot;</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">subject</span><span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:authentication</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>   <span class="n">it</span> <span class="s2">&quot;should enqueue a Facebook friend saver when saved&quot;</span> <span class="k">do</span>
+</span><span class='line'>     <span class="n">expect</span> <span class="p">{</span> <span class="n">subject</span><span class="o">.</span><span class="n">save</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="no">FacebookFriendWorker</span><span class="o">.</span><span class="n">jobs</span><span class="p">,</span> <span class="ss">:size</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>   <span class="k">end</span>
+</span><span class='line'> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Write a lifecycle method on Authentication that will enqueue the worker.  We&rsquo;re
+definitely getting close now!</p>
+
+<h2>Step 5: Putting it all together</h2>
+
+<p>Code wise, you are ready to go!  We have a few more things to put in place
+before we can actually <strong>run</strong> the code and have everything work.</p>
+
+<p>First, sidekiq requires redis, so let&rsquo;s install that.</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install redis
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We don&rsquo;t want redis to run all the time&mdash; it&rsquo;s not as cool as postgres.  It does
+need some configuration to run, so let&rsquo;s save <a href="https://gist.github.com/bigfleet/7292464#file-redis-conf">this file</a> at
+<code>config/redis.conf</code></p>
+
+<p>Finally, <strong>add</strong> these two lines to your <code>Procfile</code>:</p>
+
+<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">redis</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span><span class="o">/</span><span class="n">redis</span><span class="o">.</span><span class="n">conf</span>
+</span><span class='line'><span class="ss">worker</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">sidekiq</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step 6:</h2>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And try it in your web browser!</p>
+
+<p>You should see something in your server window like:</p>
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>11:15:52 worker.1 | 2013-11-03T16:15:52Z 60093 TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: <span class="k">done</span>: 4.197 sec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>if it worked.  You can then use the data in there to print out various things in
+the rest of your app.  Try it out!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-03T11:46:00-05:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
+      
+
+posted in
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/lpca/'>lpca</a>
+  
+</span>
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/" title="Previous Post: Facebook OAuth using OmniAuth and Rails 4">&laquo; Facebook OAuth using OmniAuth and Rails 4</a>
+    
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/10/devops-culture-hacks-devops-com/">DevOps Culture Hacks | DevOps.com</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2013 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51e13f58f5a1f52d5300006b');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</body>
+</html>

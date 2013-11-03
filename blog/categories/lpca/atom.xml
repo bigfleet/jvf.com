@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: lpca | Hello, I'm Jim Van Fleet]]></title>
+  <link href="http://www.jimvanfleet.com//blog/categories/lpca/atom.xml" rel="self"/>
+  <link href="http://www.jimvanfleet.com//"/>
+  <updated>2013-11-03T15:08:07-05:00</updated>
+  <id>http://www.jimvanfleet.com//</id>
+  <author>
+    <name><![CDATA[Jim Van Fleet]]></name>
+    <email><![CDATA[jim@jimvanfleet.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deferred Work Using Sidekiq]]></title>
+    <link href="http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq/"/>
+    <updated>2013-11-03T11:46:00-05:00</updated>
+    <id>http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq</id>
+    <content type="html"><![CDATA[<p>As we&rsquo;ve discussed at certain points in the past, user experience is extremely
+important, and back-end developers have a lot to do with that as well.  Many
+users can deal with &lsquo;ugly&rsquo; if the interface is clear, but no one on Earth likes
+slow!  We&rsquo;ll look at how to take needed work out of the request/response cycle
+in this exercise.</p>
+
+<h2>Step 0</h2>
+
+<p>We&rsquo;ll be revisiting the <a href="https://github.com/itsbspoke/aitfc">house project</a> with
+this exercise.  I&rsquo;ve merged the work that we&rsquo;ve accomplished into master, so
+that you&rsquo;ll be able to either update your forks, or pull the changes down
+locally.</p>
+
+<p>What&rsquo;s that, you <em>weren&rsquo;t</em> working on a branch when you made your changes, and you
+can&rsquo;t apply my changes quickly?</p>
+
+<p>If you have made changes on master that are now irrelevant, try issuing these
+commands:</p>
+
+<p><code>bash Terminal
+git commit -a -m "Saving my work, just in case"
+git checkout -b save-my-work
+git branch -D master
+git checkout -b master -t origin/master
+</code>
+That should get you ready to work again.  But create branches when you start
+working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
+
+<p><code>bash Terminal
+git checkout -b friend-graph-sidekiq
+</code></p>
+
+<h2>Step 1</h2>
+
+<p>Add these files to your Gemfile:</p>
+
+<p>``` ruby Gemfile
+gem &ldquo;koala&rdquo;, &ldquo;~> 1.8.0rc1&rdquo;
+gem &lsquo;sidekiq&rsquo;</p>
+
+<h1>add this in the test group</h1>
+
+<p>gem &lsquo;mocha&rsquo;, :require => &lsquo;mocha/api&rsquo;
+```</p>
+
+<p>Install them.  You should know how by now!  Ask a neighbor if you don&rsquo;t.</p>
+
+<h2>Step 2</h2>
+
+<p>Put these contents in spec/models/social_connection_spec.rb</p>
+
+<p>``` ruby spec/models/social_connection_spec.rb
+require &lsquo;spec_helper&rsquo;</p>
+
+<p>describe SocialConnection do</p>
+
+<p>  describe &ldquo;validation&rdquo; do</p>
+
+<pre><code>subject{ build(:social_connection) }
+it{ should be_valid }
+it "should require a user" do
+  build(:social_connection, user: nil).should_not be_valid
+end
+it "should require a provider" do
+  build(:social_connection, provider: nil).should_not be_valid
+end
+it "should require a uid" do
+  build(:social_connection, uid: nil).should_not be_valid
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  describe &ldquo;associations&rdquo; do</p>
+
+<pre><code>it "should be present on user" do
+  build(:user).respond_to?(:social_connections).should == true
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  describe &ldquo;Facebook&rdquo; do</p>
+
+<pre><code>let(:user){ create(:user) }
+
+describe "interface" do
+  subject{ FacebookInterface.for(user) }
+  it {should_not be_nil}
+  it {should be_a(FacebookInterface::StubInterface)}
+end
+
+describe "usage" do
+  let(:fbi){ FacebookInterface.for(user) }
+end
+</code></pre>
+
+<p>  end
+end
+```
+This will give you a spec to pass!  Run your specs with either:</p>
+
+<p><code>bash Terminal
+bundle exec guard start -i
+</code></p>
+
+<p>or</p>
+
+<p><code>bash Terminal
+bundle exec rake spec
+</code></p>
+
+<p>if you know that guard isn&rsquo;t working for you.</p>
+
+<p>To pass this test, you&rsquo;ll need to:</p>
+
+<ul>
+<li>create a model with the right fields and types</li>
+<li>add the proper associations throughout the domain</li>
+<li>add validations to the class you create</li>
+</ul>
+
+
+<p>If you&rsquo;d like a hint, download <a href="https://gist.github.com/bigfleet/7292464#file-social_connections-rb">this file</a> into
+<code>spec/factories/social_connections.rb</code>, or simply refer to it inline.</p>
+
+<p>Our goal with this step is to create a record that allows us to keep track of
+some basic information for social connections on the part of our users.  When
+you have this spec passing, you have the domain layer ready!  Now let&rsquo;s proceed
+to the integration.</p>
+
+<h2>Step 3</h2>
+
+<p>Place this file in <code>spec/support/facebook_interface.rb</code>.</p>
+
+<p>``` ruby spec/support/facebook_interface.rb
+class FacebookInterface</p>
+
+<p>  class StubInterface</p>
+
+<pre><code>def friends
+  [
+    {
+      "name" =&gt; "James Schaffer",
+      "id" =&gt; "11670"
+    },
+    {
+      "name" =&gt; "Brian O'Malley",
+      "id" =&gt; "615125"
+    },
+    {
+      "name" =&gt; "Greg Staff",
+      "id" =&gt; "1507686"
+    },
+    {
+      "name" =&gt; "Katherine McNerney",
+      "id" =&gt; "1530325"
+    },
+    {
+      "name" =&gt; "Joel Bonasera",
+      "id" =&gt; "1905046"
+    },
+    {
+      "name" =&gt; "Denny Abraham",
+      "id" =&gt; "1911249"
+    }
+  ]
+end
+
+def friend_detail(id)
+  {
+    "id" =&gt; id.to_s,
+    "name" =&gt; "James Schaffer",
+    "first_name" =&gt; "James",
+    "last_name" =&gt; "Schaffer",
+    "link" =&gt; "https://www.facebook.com/jas.schaffer",
+    "username" =&gt; "jas.schaffer",
+    "gender" =&gt; "male",
+    "locale" =&gt; "en_US",
+    "updated_time" =&gt; "2013-09-23T02:08:44+0000"
+  }
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>FacebookInterface.stubs(:for).returns(FacebookInterface::StubInterface.new)
+```</p>
+
+<p>Place this file in <code>spec/support/sidekiq.rb</code></p>
+
+<p><code>ruby spec/support/sidekiq.rb
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+</code></p>
+
+<p>Finally, place this spec in place in
+<code>spec/models/facebook_friend_worker_spec.rb</code>:</p>
+
+<p>``` ruby spec/models/facebook_friend_worker_spec.rb
+require &lsquo;spec_helper&rsquo;</p>
+
+<p>describe FacebookFriendWorker do</p>
+
+<p>  subject{ FacebookFriendWorker.new }</p>
+
+<p>  it &ldquo;should include the line &lsquo;include Sidekiq::Worker&rsquo;&rdquo; do</p>
+
+<pre><code>subject.respond_to?(:jid).should == true
+</code></pre>
+
+<p>  end</p>
+
+<p>  context &ldquo;when processing friends&rdquo; do</p>
+
+<pre><code>before(:each) do
+  @user = create(:user)
+end
+
+it "should save all friends" do
+  lambda{ subject.perform(@user.id) }.should change(SocialConnection, :count).by(6)
+end
+
+context  "attribute saving" do
+  before(:each) do
+    subject.perform(@user.id)
+    @friend = SocialConnection.where(uid: "1905046").first
+  end
+
+  it "should store uid" do
+    @friend.should_not be_nil
+  end
+
+  it "should save provider" do
+    @friend.provider.should == "facebook"
+  end
+
+  it "should store name" do
+    @friend.name.should == "Joel Bonasera"
+  end
+
+  it "should be bidirectional" do
+    @friend.follower.should == true
+    @friend.follows.should == true
+  end
+
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```</p>
+
+<p>This will give you the next spec to run.  This will test that you can progress
+through the Facebook API response, and save the results to the DB in the
+appropriate manner.</p>
+
+<p>It&rsquo;s customary to create an <code>app/workers</code> directory to place your
+<code>FacebookFriendWorker</code>, as well as any other background workers that
+you create.  So the code that you write to pass this test should go in
+<code>app/workers/facebook_friend_worker.rb</code>.</p>
+
+<p>When your specs are passing here, we&rsquo;ve added the ability to defer work outside
+of the request/response cycle.  We&rsquo;re most of the way to seeing this work!</p>
+
+<h2>Step 4</h2>
+
+<p><strong>Add</strong> this spec to your <code>spec/models/authentication_spec.rb</code> file:</p>
+
+<p>``` ruby spec/models/authentication_spec.rb
+ context &ldquo;saving Facebook auths&rdquo; do
+   subject{ build(:authentication) }
+   it &ldquo;should enqueue a Facebook friend saver when saved&rdquo; do</p>
+
+<pre><code> expect { subject.save }.to change(FacebookFriendWorker.jobs, :size).by(1)
+</code></pre>
+
+<p>   end
+ end
+```</p>
+
+<p>Write a lifecycle method on Authentication that will enqueue the worker.  We&rsquo;re
+definitely getting close now!</p>
+
+<h2>Step 5: Putting it all together</h2>
+
+<p>Code wise, you are ready to go!  We have a few more things to put in place
+before we can actually <strong>run</strong> the code and have everything work.</p>
+
+<p>First, sidekiq requires redis, so let&rsquo;s install that.</p>
+
+<p><code>bash Terminal
+brew install redis
+</code></p>
+
+<p>We don&rsquo;t want redis to run all the time&mdash; it&rsquo;s not as cool as postgres.  It does
+need some configuration to run, so let&rsquo;s save <a href="https://gist.github.com/bigfleet/7292464#file-redis-conf">this file</a> at
+<code>config/redis.conf</code></p>
+
+<p>Finally, <strong>add</strong> these two lines to your <code>Procfile</code>:</p>
+
+<p><code>ruby Procfile
+redis: redis-server config/redis.conf
+worker: bundle exec sidekiq
+</code></p>
+
+<h2>Step 6:</h2>
+
+<p><code>bash Terminal
+bundle exec foreman start
+</code>
+And try it in your web browser!</p>
+
+<p>You should see something in your server window like:</p>
+
+<p><code>
+11:15:52 worker.1 | 2013-11-03T16:15:52Z 60093 TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: done: 4.197 sec
+</code></p>
+
+<p>if it worked.  You can then use the data in there to print out various things in
+the rest of your app.  Try it out!</p>
+]]></content>
+  </entry>
+  
+</feed>
