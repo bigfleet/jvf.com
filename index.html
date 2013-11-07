@@ -347,7 +347,57 @@ to the integration.</p>
 
 <h2>Step 3</h2>
 
-<p>Place this file in <code>spec/support/facebook_interface.rb</code>.</p>
+<p>I&rsquo;ve braved the wilds of koala to bring you this super simple usage for the
+Facebook API.  Place this file in <code>app/interfaces/facebook_interface.rb</code>.</p>
+
+<figure class='code'><figcaption><span>app/interfaces/facebook_interface.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FacebookInterface</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">auth</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">authentications</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">provider</span><span class="p">:</span> <span class="s2">&quot;facebook&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">oauth_token</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="no">FacebookInterface</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">Koala</span><span class="p">:</span><span class="ss">:Facebook</span><span class="o">::</span><span class="no">API</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">oauth_token</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@api</span> <span class="o">=</span> <span class="n">api</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">friends</span>
+</span><span class='line'>    <span class="vi">@api</span><span class="o">.</span><span class="n">get_connections</span><span class="p">(</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="s2">&quot;friends&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">friend_detail</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@api</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We don&rsquo;t want to hit the API as we&rsquo;re testing, so let&rsquo;s bring in this standin.</p>
 
 <figure class='code'><figcaption><span>spec/support/facebook_interface.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -637,7 +687,8 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 
 
 <p>if it worked.  You can then use the data in there to print out various things in
-the rest of your app.  Try it out!</p>
+the rest of your app.  Try <code>current_user.social_connections.count</code> in
+your console, or in your view!</p>
 </div>
   
   
