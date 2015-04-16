@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Facebook OAuth using OmniAuth and Rails 4 - Hello, I'm Jim Van Fleet</title>
+  <meta name="author" content="Jim Van Fleet">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Allowing Facebook logins in Rails 4 I had to copy and paste in information from a variety of sources to end up
+with something I liked at the time of &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello, I'm Jim Van Fleet" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="Hello, I'm Jim Van Fleet" />
+  <meta name="og:title" content="Facebook OAuth using OmniAuth and Rails 4" />
+  <meta name="og:description" content="Allowing Facebook logins in Rails 4 I had to copy and paste in information from a variety of sources to end up
+with something I liked at the time of &hellip;" />
+  <meta name="og:url" content="http://www.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/"/>
+  <meta name="url" content="http://www.jimvanfleet.com/jvf/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">
+  
+  <meta name="subject" content="facebook,oauth,omniauth"/>
+  <meta name="category" content="facebook,oauth,omniauth"/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Hello, I'm Jim Van Fleet</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:www.jimvanfleet.com/jvf" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">Facebook OAuth Using OmniAuth and Rails 4</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-21T11:30:00-04:00" pubdate data-updated="true">Oct 21<span>st</span>, 2013</time> - 
+        
+
+posted in
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/facebook/'>facebook,</a>, <a class='category' href='/blog/categories/oauth/'>oauth,</a>, <a class='category' href='/blog/categories/omniauth/'>omniauth</a>
+  
+</span>
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Allowing Facebook logins in Rails 4</h2>
+
+
+
+
+<p>I had to copy and paste in information from a variety of sources to end up
+with something I liked at the time of this writing.  Since I want to walk my
+students in <a href="http://www.launchpadcodeacademy.com/">Launchpad Code
+Academy</a> through this process, I figured I&#8217;d make this walkthrough public.
+It may help newcomers for quite some time to come!</p>
+
+
+
+
+<h3>About this solution</h3>
+
+
+
+
+<p>We are going to be using a server-side OAuth authorization.  The mechanism
+uses some JavaScript checks and interfaces with the JS Facebook API, but
+ultimately the connection is made on the server-side.</p>
+
+
+
+
+<p>You don&#8217;t necessarily have to be using Devise, but if you&#8217;re not, our tips
+about how to leverage this approach for Facebook login may not be helpful.</p>
+
+
+
+
+<p>With a little extra work, you can allow users that have attached their
+Facebook account to log in with Facebook.  You might even be able to adapt this
+approach to allowing users to create accounts with a single click.  But you
+won&#8217;t like that as much when you want to get Twitter involved, since Twitter
+doesn&#8217;t send an email address in its OAuth callback.  It&#8217;s best to have existing
+users affiliate their accounts and then providing login as a convenience.</p>
+
+
+
+
+<h3>Getting started</h3>
+
+
+<p><span class="step">Step 1: Installing gems</span></p>
+
+<p>Include these gems in your Gemfile:</p>
+
+
+
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;omniauth&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth-facebook&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4.0&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Install them in your terminal with the bundle command:</p>
+
+
+
+
+<figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><span class="step">Step 2</span></p>
+
+<p>Per the <a href="https://github.com/mkdynamic/omniauth-facebook#usage">usage
+instructions for omniauth-facebook</a>, create a new file in config/initializers
+named omniauth.rb:</p>
+
+
+
+
+<figure class='code'><figcaption><span>config/initializers/omniauth.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">OmniAuth</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">logger</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">OmniAuth</span><span class="p">:</span><span class="ss">:Builder</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">provider</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_KEY&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_SECRET&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>The config/initializers directory is designed for use on Rails startup to
+configure how libraries are intended to operate.  In this case, we want our
+Rails application to know that we are using Omniauth, and are configuring the
+Facebook provider to reference environment variables to run.</p>
+
+
+
+
+<p>To set these environment variables properly, we&#8217;ll need to go get some info
+from Facebook.</p>
+
+
+
+
+<h3>Creating and configuring a Facbook App</h3>
+
+
+<p><span class="step">Step 1: An app</span></p>
+
+<p>I honestly don&#8217;t remember what it&#8217;s like to register for a Facebook developer
+account, other than it should be free, and it should happen at the
+<a href="https://developers.facebook.com/">Facebook Developers</a> site.</p>
+
+
+
+
+<p>When you&#8217;ve registered properly, there should be an &#8220;Apps&#8221; tab in your
+navigation.  Click on that to travel to <a href="https://developers.facebook.com/apps">
+your list of apps.</a></p>
+
+
+
+
+<p>Click &#8220;Create New App&#8221;.  You should pick a name that indicates you are doing
+testing.  You can place it in a namespace, if you like, but that&#8217;s optional.</p>
+
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/7383f6e2-cebb-4bcc-b630-6df857a7ee54/6cb1990638eea3cedcbf2bb5372279e6/deep/0/Facebook%20Developers.png' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><p></p>
+
+<p><p>Click &ldquo;Continue&rdquo;, and you should be brought to an application screen that
+contains your App ID (or API Key) and your App Secret.  Note those, but we&rsquo;ll
+need to fill in some information here.</p></p>
+
+<p><p>In the &ldquo;App Domains&rdquo; box, put &lsquo;localhost&rsquo;</p></p>
+
+<p><p>Click the green check on &ldquo;Website with Facebook Login&rdquo;, and fill that in with
+<a href="http://localhost:5000/.">http://localhost:5000/.</a>  My students (or anyone who uses <a href="https://github.com/bigfleet/rails-templates">my Rails templates</a>)
+will be able to use this.  This value may be different for you&mdash; make sure that it
+matches whatever you use in development.  localhost:3000 would be common if you
+are using <code>rails s</code> and appname.dev would be likely if you were using
+Pow.</p></p>
+
+<p><span class='caption-wrapper'><img class='caption' src='https://www.evernote.com/shard/s1/sh/45f415ea-8f8c-4249-ba0e-d7e2c40dde6c/800ff5c9285390d745236d13f5464b03/deep/0/Basic-%20Facebook%20Developers.png' width='' height='' title='Mine looked like this'><span class='caption-text'>Mine looked like this</span></span></p>
+
+<p><span class="step">Step 2: Installing application details</span></p>
+
+<p><p>Students in my class use <a
+href="https://github.com/ddollar/foreman">foreman</a> to run their development
+environment.  If you won&rsquo;t, perhaps you can consider <a href="https://github.com/bkeepers/dotenv">dotenv</a>,
+to load env variables from files for you?  It&rsquo;s important not to commit
+sensitive information like this Facebook App Secret to your repository.  Note
+the difficulties and caveats, should you ever need to <a href="https://help.github.com/articles/remove-sensitive-data">remove sensitive data</a>.
+Usage of foreman or dotenv can help with that.</p></p>
+
+<p><p>If you are using foreman, you can add these files to your .env file (which is
+not in version control).  Instead of the values below, they should match your
+own app&rsquo;s key and secret that you obtained previously.  You cannot just copy and
+paste this file.  I totally made up these numbers, and they will not work.</p></p>
+
+<p><figure class='code'><figcaption><span>.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">FACEBOOK_KEY</span><span class="o">=</span><span class="mi">686338067928534</span>
+</span><span class='line'><span class="no">FACEBOOK_SECRET</span><span class="o">=</span><span class="mi">60</span><span class="n">b9fe21ab431897eabc0743b39a5406</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><h3>Facebook Powers: Activate!</h3></p>
+
+<p><span class="step">Step 1: Create a model to store the authentications</span></p>
+
+<p><p>We don&rsquo;t want to tie authentications to a user in a 1-1 way, since we&rsquo;d love
+to allow connecting with other social networks by default.  We want a user to
+have many social networks attached, potentially, so we&rsquo;ll create a model that
+appropriately attaches to users.</p></p>
+
+<p><p>Create an Authentication model using this command: </p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g model Authentication user_id:integer provider:string uid:string name:string oauth_token:string oauth_expires_at:datetime
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>This will create a migration for you similar to this:</p></p>
+
+<p><figure class='code'><figcaption><span>db/migrate/20131015222934_create_authentications.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateAuthentications</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:authentications</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:user_id</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:provider</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:uid</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:oauth_token</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">datetime</span> <span class="ss">:oauth_expires_at</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>You&rsquo;ll also need to provide a mechanism for Omniauth to save the data it can
+provide to your DB for your use.  After you issue the above command, you should
+have an <code>app/models/authentications.rb</code> file.  Replace that file with
+these contents:</p></p>
+
+<p><figure class='code'><figcaption><span>app/models/authentication.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Authentication</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">from_omniauth</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">where</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="ss">:provider</span><span class="p">,</span> <span class="ss">:uid</span><span class="p">))</span><span class="o">.</span><span class="n">first_or_initialize</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">authentication</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">provider</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">uid</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">oauth_token</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">credentials</span><span class="o">.</span><span class="n">token</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">oauth_expires_at</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">credentials</span><span class="o">.</span><span class="n">expires_at</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">authentication</span><span class="o">.</span><span class="n">save!</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Be sure to also add <code>has_many :authentications</code> to your
+<code>app/models/user.rb</code> file.  And don&rsquo;t forget to run your database
+migrations here!</p></p>
+
+<p><span class="step">Step 2: Create the authentication user interface</span></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g controller authentications index
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>This will create an authentications controller, and a view file for you.  We
+don&rsquo;t quite want any of what we get out of the package.  Copy these file
+contents into your authentications controller:</p></p>
+
+<p><figure class='code'><figcaption><span>app/controllers/authentications_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="vi">@authentications</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span> <span class="k">if</span> <span class="n">current_user</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>    <span class="n">auth</span> <span class="o">=</span> <span class="no">Authentication</span><span class="o">.</span><span class="n">from_omniauth</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">env</span><span class="o">[</span><span class="s2">&quot;omniauth.auth&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Authentication successful.&quot;</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">authentications_url</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">destroy</span>
+</span><span class='line'>    <span class="vi">@authentication</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@authentication</span><span class="o">.</span><span class="n">destroy</span>
+</span><span class='line'>    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Successfully destroyed authentication.&quot;</span>
+</span><span class='line'>    <span class="n">redirect_to</span> <span class="n">authentications_url</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+<p>Place this file into your JavaScript directory.  Note that <strong>this one won&rsquo;t
+work either by just copying and pasting</strong>!  You need to include your non-sensitive
+App ID :</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/javascripts/facebook.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Additional JS functions here</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">fbAsyncInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">appId</span>      <span class="o">:</span> <span class="mi">686338067928534</span><span class="p">,</span> <span class="c1">// App ID</span>
+</span><span class='line'>    <span class="nx">status</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// check login status</span>
+</span><span class='line'>    <span class="nx">cookie</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// enable cookies to allow the server to access the session</span>
+</span><span class='line'>    <span class="nx">xfbml</span>      <span class="o">:</span> <span class="kc">true</span>  <span class="c1">// parse XFBML</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Load the SDK Asynchronously</span>
+</span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span>
+</span><span class='line'>   <span class="kd">var</span> <span class="nx">js</span><span class="p">,</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;facebook-jssdk&#39;</span><span class="p">,</span> <span class="nx">ref</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span><span class="k">return</span><span class="p">;}</span>
+</span><span class='line'>   <span class="nx">js</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span> <span class="nx">js</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span> <span class="nx">js</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">js</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;//connect.facebook.net/en_US/all.js&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">ref</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span> <span class="nx">ref</span><span class="p">);</span>
+</span><span class='line'><span class="p">}(</span><span class="nb">document</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">fblogin</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">getLoginStatus</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="s2">&quot;connected&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span>
+</span><span class='line'>        <span class="s1">&#39;/auth/facebook/callback?&#39;</span> <span class="o">+</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">signed_request</span><span class="o">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">.</span><span class="nx">signedRequest</span> <span class="p">})</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>     <span class="nx">FB</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="s1">&#39;/auth/facebook/callback?&#39;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">signed_request</span><span class="o">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">authResponse</span><span class="p">.</span><span class="nx">signedRequest</span> <span class="p">})</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>     <span class="p">})</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+<p>Copy this view file into place, as the bulk of our tutorial actions will
+happen there.  There are HTML comment blocks below&mdash; my blog assumes I want a
+hyphen, when I really do want two dashes.  Be sure the file matches <a href="https://gist.github.com/bigfleet/7088190">this gist</a>. </p></p>
+
+<p><figure class='code'><figcaption><span>app/views/authentications/index.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="vi">@authentications</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">    &lt;p&gt;&lt;strong&gt;You can sign in to this account using:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;authentications&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%</span> <span class="k">for</span> <span class="n">authentication</span> <span class="k">in</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;div class=&quot;authentication&quot;&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">authentication</span><span class="o">.</span><span class="n">provider</span><span class="si">}</span><span class="s2">_32.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;32x32&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">          &lt;div class=&quot;provider&quot;&gt;</span><span class="cp">&lt;%=</span> <span class="n">authentication</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">titleize</span> <span class="cp">%&gt;</span><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">          &lt;div class=&quot;uid&quot;&gt;</span><span class="cp">&lt;%=</span> <span class="n">authentication</span><span class="o">.</span><span class="n">uid</span> <span class="cp">%&gt;</span><span class="x">&lt;/div&gt;</span>
+</span><span class='line'><span class="x">          </span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">authentication</span><span class="p">,</span> <span class="ss">:confirm</span> <span class="o">=&gt;</span> <span class="s1">&#39;Are you sure you want to remove this authentication option?&#39;</span><span class="p">,</span> <span class="ss">:method</span> <span class="o">=&gt;</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;remove&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;/div&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;p&gt;&lt;strong&gt;Add another service to sign in with:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;p&gt;&lt;strong&gt;Sign in through one of these services:&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;!&mdash;</span>
+</span><span class='line'><span class="x">&lt;a href=&quot;/auth/twitter&quot; class=&quot;auth_provider&quot;&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;twitter_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Twitter&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  Twitter</span>
+</span><span class='line'><span class="x">&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&mdash;&gt;</span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="vi">@authentications</span><span class="o">.</span><span class="n">select</span><span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="n">a</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;facebook&quot;</span> <span class="p">}</span><span class="o">.</span><span class="n">any?</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">link_to_function</span> <span class="n">image_tag</span><span class="p">(</span><span class="s2">&quot;facebook_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Facebook&quot;</span><span class="p">),</span> <span class="s1">&#39;fblogin()&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&lt;!&mdash;</span>
+</span><span class='line'><span class="x">&lt;a href=&quot;/auth/google_apps&quot; class=&quot;auth_provider&quot;&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">image_tag</span> <span class="s2">&quot;google_64.png&quot;</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s2">&quot;64x64&quot;</span><span class="p">,</span> <span class="ss">:alt</span> <span class="o">=&gt;</span> <span class="s2">&quot;Google&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  Google</span>
+</span><span class='line'><span class="x">&lt;/a&gt;</span>
+</span><span class='line'><span class="x">&mdash;&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="x">&lt;div class=&quot;clear&quot;&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Let&rsquo;s pretty this up a little with some CSS:</p></p>
+
+<p><figure class='code'><figcaption><span>app/stylesheets/authentications.css.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.authentications</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">30</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">width</span><span class="o">:</span> <span class="mi">130</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#EEE</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">border</span><span class="o">:</span> <span class="no">solid</span> <span class="mi">1</span><span class="kt">px</span> <span class="mh">#999</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">5</span><span class="kt">px</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-moz-border-radius</span><span class="o">:</span> <span class="mi">8</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-webkit-border-radius</span><span class="o">:</span> <span class="mi">8</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">position</span><span class="o">:</span> <span class="no">relative</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.remove</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">text-decoration</span><span class="o">:</span> <span class="no">none</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">position</span><span class="o">:</span> <span class="no">absolute</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">top</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">right</span><span class="o">:</span> <span class="mi">3</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#333</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="mi">4</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">font-size</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.remove</span><span class="nd">:hover</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#CCC</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">background-color</span><span class="o">:</span> <span class="mh">#777</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-moz-border-radius</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">-webkit-border-radius</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nt">img</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.provider</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.authentication</span> <span class="nc">.uid</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">color</span><span class="o">:</span> <span class="mh">#666</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">font-size</span><span class="o">:</span> <span class="mi">11</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.auth_provider</span> <span class="nt">img</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.auth_provider</span> <span class="err">{</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">text-decoration</span><span class="o">:</span> <span class="no">none</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-right</span><span class="o">:</span> <span class="mi">20</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">10</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><span class="step">Step 3: Putting it all together</span></p>
+
+<p><p>First, the above step created some cruft in your routes that will make you
+unhappy later.  Remove the line that says <code>get
+&ldquo;authentications#index&rdquo;</code> from your routing file.  Your route file should contain
+a trace of the authentications you plan on dealing with.  Use this snippet:</p></p>
+
+<p><figure class='code'><figcaption><span>config/routes.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">resources</span> <span class="ss">:authentications</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/:provider/callback&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;authentications#create&#39;</span><span class="p">,</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/failure&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Ensure that your Facebook JavaScript is loaded into the asset pipeline:</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">//=</span> <span class="nx">require</span> <span class="nx">facebook</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Ensure that your authentications CSS is loaded into the asset pipeline:</p></p>
+
+<p><figure class='code'><figcaption><span>app/assets/stylesheets/application.css.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;authentications&quot;;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Include a link to social logins to your already logged in accounts:</p></p>
+
+<p><figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Social Accounts&quot;</span><span class="p">,</span> <span class="n">authentications_path</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Download some Facebook icons:</p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -o app/assets/images/facebook_32.png <a href="https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png">https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png</a>
+</span><span class='line'>cp app/assets/images/facebook_32.png app/assets/images/facebook_64.png
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>You can use Facebook to let people create new accounts, but that&rsquo;s left as an
+exercise to the reader!</p></p>
+
+<p><span class="step">Step 4: Boot it up</span></p>
+
+<p><p>Issue a command to start your server:</p></p>
+
+<p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>Since setting environment variables is important to the application running
+properly, <code>rails s</code> probably won&rsquo;t work any longer!  Foreman will put
+us in good position to manage environment variables (and pull user social
+graphs via Sidekiq later!)</p></p>
+
+<p><p>You should be able to click through to the</p>
+
+<p><h3>Acknowledgements:</h3></p>
+
+<p><p>Many of the file contents are avialable in <a href="https://gist.github.com/bigfleet/7088190">this gist</a>.</p></p>
+
+<p><p>The amazing RailsCasts series provided not <a href="http://railscasts.com/episodes/235-omniauth-part-1">one</a> but <a href="http://railscasts.com/episodes/360-facebook-authentication">two</a> pieces of this finished puzzle.  Thanks, Ryan!</p></p>
+
+<p><p>This StackOverflow post on <a href="http://stackoverflow.com/questions/11597130/omniauth-facebook-keeps-reporting-invalid-credentials">invalid_credentials in Omniauth-facebook</a> pointed out the need to use a particular omniauth-facebook release.  Another StackOverflow post pointed out the need to <a href="http://stackoverflow.com/questions/12370056/omniauth-strategies-facebook-noauthorizationcodeerror-must-pass-either-a-code">send a signed_request parameter with the GET to the Facebook SDK</a>.  That&rsquo;s incorporated into the above JavaScript.</p></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Jim Van Fleet</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-21T11:30:00-04:00" pubdate data-updated="true">Oct 21<span>st</span>, 2013</time>
+      
+
+posted in
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/facebook/'>facebook,</a>, <a class='category' href='/blog/categories/oauth/'>oauth,</a>, <a class='category' href='/blog/categories/omniauth/'>omniauth</a>
+  
+</span>
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2011/10/19/charlotte-startup-weekend-3/" title="Previous Post: Charlotte Startup Weekend 3">&laquo; Charlotte Startup Weekend 3</a>
+    
+    
+      <a class="pull-right" href="/blog/2013/11/03/deferred-work-using-sidekiq/" title="Next Post: Deferred Work Using Sidekiq">Deferred Work Using Sidekiq &raquo;</a>
+    
+  </footer>
+
+</div>
+
+        
+      </article>
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2015/04/16/the-end-of-an-era/">The end of an era</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/11/03/deferred-work-using-sidekiq/">Deferred Work Using Sidekiq</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/10/21/facebook-oauth-using-omniauth-and-rails-4/">Facebook OAuth using OmniAuth and Rails 4</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/10/19/charlotte-startup-weekend-3/">Charlotte Startup Weekend 3</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/03/30/charlotte-startup-weekend-2/">Charlotte Startup Weekend 2</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/bigfleet" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @bigfleet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="bigfleet">
+</div>
+
+
+  </div>
+  <div class="span2">
+    <h2>found on</h2>
+
+<a href="https://github.com/bigfleet/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/jimvanfleet" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/bigfleet" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+<a href="http://www.quora.com/bigfleet" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="/images/glyphicons_385_quora.png"></a>
+
+
+
+<h2>contact at</h2>
+<a href="mailto:jim@jimvanfleet.com">jim@jimvanfleet.com</a>
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">Hello, I'm Jim Van Fleet</a>
+  - Copyright &copy; 2015 - Jim Van Fleet
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '51e13f58f5a1f52d5300006b');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+
+</body>
+</html>
