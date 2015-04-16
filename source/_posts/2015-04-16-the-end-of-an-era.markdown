@@ -6,7 +6,7 @@ comments: false
 categories: itsbspoke
 ---
 
-I notified my employees and clients this week that itsbspoke will cease operations on May 31, with the month of May serving as a severance period.  I am looking for full-time employment with a target first day of June 1.
+I notified my employees and clients this week that [itsbspoke](http://www.itsbspoke.com/) will cease operations on May 31, with the month of May serving as a severance period.  I am looking for full-time employment with a target first day of June 1.
 
 I feel such gratitude that I’ve had an opportunity to work with wonderful teammates and clients.  I knew there were significant risks as I grew my team.  Unfortunately, those risks manifested almost immediately.  This failure is mine as a business owner.  I didn’t make enough difficult, uncomfortable decisions, and in the end, I could not find enough solutions to continue.
 
@@ -20,7 +20,7 @@ Throughout my life, I’ve not been afraid of tackling challenging, systemic pro
 
 I committed bspoke to developing early stage technical employees, because of my belief that this labor market is problematic.  I continue to think that developing a labor force is critical, but would certainly not use it as a crutch to commit to work the company could not afford to deliver.
 
-I wanted to "be the change" I wanted to see in my community.  I don't regret being of service, of course.  I'm proud to have established PitchBreakfast and Charlotte Startup Weekend as fixtures in the entrepreneurial community.  I expect Code for Charlotte to improve life for all Charlotteans.  CRTEC and it-ology are very valuable parts of the technology community here.  I’ve made so many new friends through my newsletter.  I may return to those commitments in time, but I am eager to live a life more dedicated to my own young family and restoring the financial future I’ve jeopardized.
+I wanted to "be the change" I wanted to see in my community.  I don't regret being of service, of course.  I'm proud to have established [PitchBreakfast](http://www.pitchbreakfast.com/) and [Charlotte Startup Weekend](http://charlotte.startupweekend.org) as fixtures in the entrepreneurial community.  I expect [Code for Charlotte](http://www.codeforcharlotte.org/) to improve life for all Charlotteans.  [CRTEC](http://crtec.us/) and [it-ology](http://it-ology.org/en/CharlotteNC.aspx) are very valuable parts of the technology community here.  I’ve made so many new friends through my newsletter.  I may return to those commitments in time, but I am eager to live a life more dedicated to my own young family and restoring the financial future I’ve jeopardized.
 
 ## What’s next for me:
 
@@ -39,3 +39,7 @@ I don’t believe I’m capable of becoming 10x more effective as a software eng
 I spent the first twenty years of my career learning all I could about how to deliver and operate successful web applications that scaled.  In my time at bspoke, I’ve become satisfied that, while that experience certainly helps avoid expensive mistakes and failures, technology alone is never ultimately responsible for a project’s success. 
 
 I don’t feel the need to prove I can slap on the headphones and crush code to make a delivery date.  I’m certainly not opposed to bringing my whole self to any assignment, and of course that capability is valuable, but there’s enough evidence to demonstrate I cannot set healthy boundaries when accepting these assignments.
+
+## Get in touch
+
+If you think you or your firm might be a good fit for me, [let me know](mailto:jim.van.fleet+job@gmail.com).
