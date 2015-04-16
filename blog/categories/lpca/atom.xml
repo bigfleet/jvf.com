@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: lpca | Hello, I'm Jim Van Fleet]]></title>
-  <link href="http://www.jimvanfleet.com/jvf/blog/categories/lpca/atom.xml" rel="self"/>
-  <link href="http://www.jimvanfleet.com/jvf/"/>
-  <updated>2015-04-16T16:06:45-04:00</updated>
-  <id>http://www.jimvanfleet.com/jvf/</id>
+  <link href="http://www.jimvanfleet.com//blog/categories/lpca/atom.xml" rel="self"/>
+  <link href="http://www.jimvanfleet.com//"/>
+  <updated>2015-04-16T16:20:48-04:00</updated>
+  <id>http://www.jimvanfleet.com//</id>
   <author>
     <name><![CDATA[Jim Van Fleet]]></name>
     <email><![CDATA[jim@jimvanfleet.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Deferred Work Using Sidekiq]]></title>
-    <link href="http://www.jimvanfleet.com/jvf/blog/2013/11/03/deferred-work-using-sidekiq/"/>
+    <link href="http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq/"/>
     <updated>2013-11-03T11:46:00-05:00</updated>
-    <id>http://www.jimvanfleet.com/jvf/blog/2013/11/03/deferred-work-using-sidekiq</id>
+    <id>http://www.jimvanfleet.com//blog/2013/11/03/deferred-work-using-sidekiq</id>
     <content type="html"><![CDATA[<p>As we&rsquo;ve discussed at certain points in the past, user experience is extremely
 important, and back-end developers have a lot to do with that as well.  Many
 users can deal with &lsquo;ugly&rsquo; if the interface is clear, but no one on Earth likes
