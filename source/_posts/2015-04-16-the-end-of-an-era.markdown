@@ -35,4 +35,4 @@ I spent the first twenty years of my career learning all I could about how to de
 
 ## Get in touch
 
-With these goals in mind, if you think you or your firm might be a good fit for me, or if you know of someone I should speak with about possible opportunities, [let me know](mailto:jim.van.fleet+job@gmail.com).
+With these goals in mind, if you think you or your firm might be a good fit for me, or if you know of someone I should speak with about possible opportunities, let me know [via email](mailto:jim.van.fleet+job@gmail.com) or [LinkedIn](http://www.linkedin.com/in/jimvanfleet)
