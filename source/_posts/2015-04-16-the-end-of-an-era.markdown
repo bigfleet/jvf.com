@@ -6,40 +6,33 @@ comments: false
 categories: itsbspoke
 ---
 
-I notified my employees and clients this week that [itsbspoke](http://www.itsbspoke.com/) will cease operations on May 31, with the month of May serving as a severance period.  I am looking for full-time employment with a target first day of June 1.
+I notified my employees and clients this week that [itsbspoke](http://www.itsbspoke.com/) will cease operations on May 31, with the month of May serving as a transition and severance period for the team.  I am now looking for full-time employment starting June 1.
 
-I feel such gratitude that I’ve had an opportunity to work with wonderful teammates and clients.  I knew there were significant risks as I grew my team.  Unfortunately, those risks manifested almost immediately.  This failure is mine as a business owner.  I didn’t make enough difficult, uncomfortable decisions, and in the end, I could not find enough solutions to continue.
+I feel such gratitude that I’ve had an opportunity to work with wonderful teammates and clients during the past five years.  I knew there were significant entrepreneurial risks as I grew my team and expanded the scope of itsbspoke.  Unfortunately, the opportunities I envisioned as a business owner did not materialize.
 
-I made many major mistakes.   I cared a lot more about building a quality team and delivering strong software than I did creating a viable business.  In trying to deliver the best service possible, I ended up ensuring I couldn’t deliver service at all.  I should have been more willing to express boundaries to clients.
+I am proud of what we have accomplished with our clients, with Charlotte's startup community, and through the civic projects we've undertaken to benefit the City itself.  [PitchBreakfast](http://www.pitchbreakfast.com/) and [Charlotte Startup Weekend](http://charlotte.startupweekend.org) are now fixtures in the entrepreneurial community.  [Code for Charlotte](http://www.codeforcharlotte.org/) is now improving quality of life for all Charlotteans.  [CRTEC](http://crtec.us/) and [it-ology](http://it-ology.org/en/CharlotteNC.aspx) contribute significantly to the technology community here.  I’ve made so many new friends through my newsletter, and heard from so many that it has made a difference for them, as well.
 
-If I had one decision to make over again, it would be building stronger positioning much earlier in the life of the business.  I worked very hard on my relationships and reputation in Charlotte, and had a lot of people ready to share my story.  I was never able to accept that help.  Better positioning could also have eliminated the scarcity that cause the above problem.
-
-I had hired many vendors, of course, and I’ve led technical teams, but I had never been "the boss".  I wasn't perfect as a manager, but I will always be proud of the team I built.  It hurts deeply to fail them in this way.
-
-Throughout my life, I’ve not been afraid of tackling challenging, systemic problems, or things others thought impossible.  bspoke represented my opportunity to achieve financial independence “my way”.  I thought I'd tackle workplace pay inequality by hiring women, creating a safe place for them to work, and paying them market rates.  I wouldn't change that.
-
-I committed bspoke to developing early stage technical employees, because of my belief that this labor market is problematic.  I continue to think that developing a labor force is critical, but would certainly not use it as a crutch to commit to work the company could not afford to deliver.
-
-I wanted to "be the change" I wanted to see in my community.  I don't regret being of service, of course.  I'm proud to have established [PitchBreakfast](http://www.pitchbreakfast.com/) and [Charlotte Startup Weekend](http://charlotte.startupweekend.org) as fixtures in the entrepreneurial community.  I expect [Code for Charlotte](http://www.codeforcharlotte.org/) to improve life for all Charlotteans.  [CRTEC](http://crtec.us/) and [it-ology](http://it-ology.org/en/CharlotteNC.aspx) are very valuable parts of the technology community here.  I’ve made so many new friends through my newsletter.  I may return to those commitments in time, but I am eager to live a life more dedicated to my own young family and restoring the financial future I’ve jeopardized.
+I may return to these commitments in time, but now I'm eager to open a new chapter in my professional life, a chapter with more focused personal aspirations and a greater dedication to fulfulling the growing needs of my young family.
 
 ## What’s next for me:
 
-I am looking for full-time employment with a target first day of June 1.  I will not consider leaving Charlotte.  My ideal position would allow me to achieve one or more of the following:
+I am looking for full-time employment with a target first day of June 1.  I am committed to staying in Charlotte.  My ideal position would allow me to achieve the following goals:
 
 ### Work toward a more just world
 
-I (still) believe in the possibilities of a world of with abundant economic opportunity and justice.  I’ve loved getting involved in the civic technology community, and my desire to serve my community would be a strength here, not a distraction.
+I believe in the possibilities of a world of with abundant economic opportunity and justice.  I’ve loved getting involved in the civic technology community her in Charlotte.  The opportunity to make a difference in my community, and other communities, through the power of technology is important to me.
 
-### Develop as a manager
+### Develop myself as a manager and leader
 
-I don’t believe I’m capable of becoming 10x more effective as a software engineer.  But I do believe I could create a team where that kind of improvement happened regularly.  I don’t have formal training or a long track record of experience, but I can point to the success of my classes and the references of teams I’ve helped gel in the past.  This represents the next phase for me.
+My next step is not becoming 10x more effective as a software engineer, but in creating and leading teams that can reach new heights and accomplish what was once thought impossible.  I might not have an MBA, but I've led teams down the road of hard knocks, built the relationships necessary and achieved success more often than not.  This represents the next phase for me.
 
 ### Ditch the headphones
 
-I spent the first twenty years of my career learning all I could about how to deliver and operate successful web applications that scaled.  In my time at bspoke, I’ve become satisfied that, while that experience certainly helps avoid expensive mistakes and failures, technology alone is never ultimately responsible for a project’s success. 
+I no longer feel the need to prove I can slap on the headphones and crush code to make a delivery date.  I’m certainly not opposed to bringing my whole self to any assignment, and of course that capability is valuable.
 
-I don’t feel the need to prove I can slap on the headphones and crush code to make a delivery date.  I’m certainly not opposed to bringing my whole self to any assignment, and of course that capability is valuable, but there’s enough evidence to demonstrate I cannot set healthy boundaries when accepting these assignments.
+I spent the first twenty years of my career learning all I could about how to deliver and operate successful web applications that scaled.  While that experience certainly helps avoid expensive mistakes and failures, I've learned that technology alone is never ultimately responsible for a project’s success.  My opportunities for growth involve attending to the business, organizational, and leadership dimensions of succes, and that requires setting the headphones aside.
+
 
 ## Get in touch
 
-If you think you or your firm might be a good fit for me, [let me know](mailto:jim.van.fleet+job@gmail.com).
+With these goals in mind, if you think you or your firm might be a good fit for me, or if you know of someone I should speak with about possible opportunities, [let me know](mailto:jim.van.fleet+job@gmail.com).
