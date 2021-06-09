@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :development do
   gem "rake", ">= 12.3.3"
-  gem 'jekyll'
+  gem "jekyll", ">= 3.6.3"
   gem 'rdiscount', '~> 2.0.7'
   gem 'pygments.rb'
   gem 'RedCloth', '~> 4.3.0'
@@ -13,9 +13,8 @@ group :development do
   gem 'rubypants', '~> 0.2.0'
   gem 'rb-fsevent', '~> 0.9'
   gem 'stringex', '~> 1.4.0'
-  gem 'liquid', '~> 2.3.0'
+  gem 'liquid', '~> 4.0'
   gem 'hpricot'
-  gem 'jekyll-import'
   gem 'guard'
   gem 'guard-livereload'
   gem "kramdown", ">= 2.3.0"
