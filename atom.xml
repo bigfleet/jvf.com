@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm Jim Van Fleet]]></title>
   <link href="http://www.jimvanfleet.com//atom.xml" rel="self"/>
   <link href="http://www.jimvanfleet.com//"/>
-  <updated>2015-04-17T08:52:52-04:00</updated>
+  <updated>2021-06-09T11:42:11-04:00</updated>
   <id>http://www.jimvanfleet.com//</id>
   <author>
     <name><![CDATA[Jim Van Fleet]]></name>
@@ -78,7 +78,7 @@ commands:</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git commit -a -m <span class="s2">&quot;Saving my work, just in case&quot;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>git commit -a -m <span class="s2">&quot;Saving my work, just in case&quot;</span>
 </span><span class='line'>git checkout -b save-my-work
 </span><span class='line'>git branch -D master
 </span><span class='line'>git checkout -b master -t origin/master
@@ -89,7 +89,7 @@ commands:</p>
 working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b friend-graph-sidekiq
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>git checkout -b friend-graph-sidekiq
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -102,7 +102,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;koala&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.8.0rc1&quot;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="n">gem</span> <span class="s2">&quot;koala&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.8.0rc1&quot;</span>
 </span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sidekiq&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1"># add this in the test group</span>
@@ -155,7 +155,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <span class='line-number'>37</span>
 <span class='line-number'>38</span>
 <span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">describe</span> <span class="no">SocialConnection</span> <span class="k">do</span>
 </span><span class='line'>
@@ -185,7 +185,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 </span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;interface&quot;</span> <span class="k">do</span>
 </span><span class='line'>      <span class="n">subject</span><span class="p">{</span> <span class="no">FacebookInterface</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should_not</span> <span class="n">be_nil</span><span class="p">}</span>
-</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should</span> <span class="n">be_a</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="p">)}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should</span> <span class="n">be_a</span><span class="p">(</span><span class="no">FacebookInterface</span><span class="o">::</span><span class="no">StubInterface</span><span class="p">)}</span>
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;usage&quot;</span> <span class="k">do</span>
@@ -200,14 +200,14 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <p>This will give you a spec to pass!  Run your specs with either:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>guard start -i
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> guard start -i
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>or</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rake spec
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> rake spec
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -284,7 +284,7 @@ to the integration.</p>
 <span class='line-number'>48</span>
 <span class='line-number'>49</span>
 <span class='line-number'>50</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FacebookInterface</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="k">class</span> <span class="nc">FacebookInterface</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">StubInterface</span>
 </span><span class='line'>
@@ -333,7 +333,7 @@ to the integration.</p>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="no">FacebookInterface</span><span class="o">.</span><span class="n">stubs</span><span class="p">(</span><span class="ss">:for</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="no">FacebookInterface</span><span class="o">.</span><span class="n">stubs</span><span class="p">(</span><span class="ss">:for</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="no">FacebookInterface</span><span class="o">::</span><span class="no">StubInterface</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -341,8 +341,8 @@ to the integration.</p>
 
 <figure class='code'><figcaption><span>spec/support/sidekiq.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sidekiq/testing&#39;</span>
-</span><span class='line'><span class="ss">Sidekiq</span><span class="p">:</span><span class="ss">:Testing</span><span class="o">.</span><span class="n">fake!</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;sidekiq/testing&#39;</span>
+</span><span class='line'><span class="no">Sidekiq</span><span class="o">::</span><span class="no">Testing</span><span class="o">.</span><span class="n">fake!</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -396,7 +396,7 @@ to the integration.</p>
 <span class='line-number'>45</span>
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">describe</span> <span class="no">FacebookFriendWorker</span> <span class="k">do</span>
 </span><span class='line'>
@@ -468,7 +468,7 @@ of the request/response cycle.  We&rsquo;re most of the way to seeing this work!
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">context</span> <span class="s2">&quot;saving Facebook auths&quot;</span> <span class="k">do</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span> <span class="n">context</span> <span class="s2">&quot;saving Facebook auths&quot;</span> <span class="k">do</span>
 </span><span class='line'>   <span class="n">subject</span><span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:authentication</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'>   <span class="n">it</span> <span class="s2">&quot;should enqueue a Facebook friend saver when saved&quot;</span> <span class="k">do</span>
 </span><span class='line'>     <span class="n">expect</span> <span class="p">{</span> <span class="n">subject</span><span class="o">.</span><span class="n">save</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="no">FacebookFriendWorker</span><span class="o">.</span><span class="n">jobs</span><span class="p">,</span> <span class="ss">:size</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -488,7 +488,7 @@ before we can actually <strong>run</strong> the code and have everything work.</
 <p>First, sidekiq requires redis, so let&rsquo;s install that.</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install redis
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>brew install redis
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -500,7 +500,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 
 <figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">redis</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span><span class="o">/</span><span class="n">redis</span><span class="o">.</span><span class="n">conf</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="ss">redis</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span><span class="o">/</span><span class="n">redis</span><span class="o">.</span><span class="n">conf</span>
 </span><span class='line'><span class="ss">worker</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">sidekiq</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -508,7 +508,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 <h2>Step 6:</h2>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> foreman start
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -517,7 +517,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 <p>You should see something in your server window like:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>11:15:52 worker.1 | 2013-11-03T16:15:52Z 60093 TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: <span class="k">done</span>: 4.197 sec
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span><span class="m">11</span>:15:52 worker.1 <span class="p">|</span> <span class="m">2013</span>-11-03T16:15:52Z <span class="m">60093</span> TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: <span class="k">done</span>: <span class="m">4</span>.197 sec
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -585,7 +585,7 @@ users affiliate their accounts and then providing login as a convenience.</p>
 
 <figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;omniauth&quot;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="n">gem</span> <span class="s2">&quot;omniauth&quot;</span>
 </span><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth-facebook&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4.0&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -598,7 +598,7 @@ users affiliate their accounts and then providing login as a convenience.</p>
 
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle install
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle install
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -616,9 +616,9 @@ named omniauth.rb:</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">OmniAuth</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">logger</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="no">OmniAuth</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">logger</span>
 </span><span class='line'>
-</span><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">OmniAuth</span><span class="p">:</span><span class="ss">:Builder</span> <span class="k">do</span>
+</span><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
 </span><span class='line'>  <span class="n">provider</span> <span class="ss">:facebook</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_KEY&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;FACEBOOK_SECRET&#39;</span><span class="o">]</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -699,7 +699,7 @@ paste this file.  I totally made up these numbers, and they will not work.</p></
 
 <p><figure class='code'><figcaption><span>.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">FACEBOOK_KEY</span><span class="o">=</span><span class="mi">686338067928534</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="no">FACEBOOK_KEY</span><span class="o">=</span><span class="mi">686338067928534</span>
 </span><span class='line'><span class="no">FACEBOOK_SECRET</span><span class="o">=</span><span class="mi">60</span><span class="n">b9fe21ab431897eabc0743b39a5406</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
@@ -715,7 +715,7 @@ appropriately attaches to users.</p></p>
 <p><p>Create an Authentication model using this command: </p></p>
 
 <p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g model Authentication user_id:integer provider:string uid:string name:string oauth_token:string oauth_expires_at:datetime
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> rails g model Authentication user_id:integer provider:string uid:string name:string oauth_token:string oauth_expires_at:datetime
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>This will create a migration for you similar to this:</p></p>
@@ -734,7 +734,7 @@ appropriately attaches to users.</p></p>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateAuthentications</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="k">class</span> <span class="nc">CreateAuthentications</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
 </span><span class='line'>    <span class="n">create_table</span> <span class="ss">:authentications</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
 </span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:user_id</span>
@@ -772,7 +772,7 @@ these contents:</p></p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Authentication</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="k">class</span> <span class="nc">Authentication</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span>
 </span><span class='line'>
@@ -798,7 +798,7 @@ migrations here!</p></p>
 <p><span class="step">Step 2: Create the authentication user interface</span></p>
 
 <p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rails g controller authentications index
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> rails g controller authentications index
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>This will create an authentications controller, and a view file for you.  We
@@ -825,7 +825,7 @@ contents into your authentications controller:</p></p>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="k">class</span> <span class="nc">AuthenticationsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
 </span><span class='line'>    <span class="vi">@authentications</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">authentications</span> <span class="k">if</span> <span class="n">current_user</span>
@@ -885,10 +885,10 @@ App ID :</p></p>
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Additional JS functions here</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span></span><span class="c1">// Additional JS functions here</span>
 </span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">fbAsyncInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-</span><span class='line'>    <span class="nx">appId</span>      <span class="o">:</span> <span class="mi">686338067928534</span><span class="p">,</span> <span class="c1">// App ID</span>
+</span><span class='line'>    <span class="nx">appId</span>      <span class="o">:</span> <span class="mf">686338067928534</span><span class="p">,</span> <span class="c1">// App ID</span>
 </span><span class='line'>    <span class="nx">status</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// check login status</span>
 </span><span class='line'>    <span class="nx">cookie</span>     <span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// enable cookies to allow the server to access the session</span>
 </span><span class='line'>    <span class="nx">xfbml</span>      <span class="o">:</span> <span class="kc">true</span>  <span class="c1">// parse XFBML</span>
@@ -897,9 +897,9 @@ App ID :</p></p>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// Load the SDK Asynchronously</span>
 </span><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">){</span>
-</span><span class='line'>   <span class="kd">var</span> <span class="nx">js</span><span class="p">,</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;facebook-jssdk&#39;</span><span class="p">,</span> <span class="nx">ref</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>   <span class="kd">var</span> <span class="nx">js</span><span class="p">,</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">&#39;facebook-jssdk&#39;</span><span class="p">,</span> <span class="nx">ref</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
 </span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">))</span> <span class="p">{</span><span class="k">return</span><span class="p">;}</span>
-</span><span class='line'>   <span class="nx">js</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span> <span class="nx">js</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span> <span class="nx">js</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">js</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span> <span class="nx">js</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span> <span class="nx">js</span><span class="p">.</span><span class="k">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 </span><span class='line'>   <span class="nx">js</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;//connect.facebook.net/en_US/all.js&quot;</span><span class="p">;</span>
 </span><span class='line'>   <span class="nx">ref</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span> <span class="nx">ref</span><span class="p">);</span>
 </span><span class='line'><span class="p">}(</span><span class="nb">document</span><span class="p">));</span>
@@ -962,7 +962,7 @@ hyphen, when I really do want two dashes.  Be sure the file matches <a href="htt
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
 <span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span></span><span class="cp">&lt;%</span> <span class="k">if</span> <span class="vi">@authentications</span> <span class="cp">%&gt;</span><span class="x"></span>
 </span><span class='line'><span class="x">  </span><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="vi">@authentications</span><span class="o">.</span><span class="n">empty?</span> <span class="cp">%&gt;</span><span class="x"></span>
 </span><span class='line'><span class="x">    &lt;p&gt;&lt;strong&gt;You can sign in to this account using:&lt;/strong&gt;&lt;/p&gt;</span>
 </span><span class='line'><span class="x">    &lt;div class=&quot;authentications&quot;&gt;</span>
@@ -1061,7 +1061,7 @@ hyphen, when I really do want two dashes.  Be sure the file matches <a href="htt
 <span class='line-number'>56</span>
 <span class='line-number'>57</span>
 <span class='line-number'>58</span>
-</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.authentications</span> <span class="err">{</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span></span><span class="nc">.authentications</span> <span class="err">{</span>
 </span><span class='line'>  <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">30</span><span class="kt">px</span><span class="err">;</span>
 </span><span class='line'><span class="err">}</span>
 </span><span class='line'>
@@ -1132,7 +1132,7 @@ a trace of the authentications you plan on dealing with.  Use this snippet:</p><
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">resources</span> <span class="ss">:authentications</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span>  <span class="n">resources</span> <span class="ss">:authentications</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/:provider/callback&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;authentications#create&#39;</span><span class="p">,</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
 </span><span class='line'>  <span class="n">match</span> <span class="s1">&#39;auth/failure&#39;</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span> <span class="ss">via</span><span class="p">:</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="o">]</span>
@@ -1141,26 +1141,26 @@ a trace of the authentications you plan on dealing with.  Use this snippet:</p><
 <p><p>Ensure that your Facebook JavaScript is loaded into the asset pipeline:</p></p>
 
 <p><figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">//=</span> <span class="nx">require</span> <span class="nx">facebook</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span></span><span class="o">//=</span> <span class="nx">require</span> <span class="nx">facebook</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>Ensure that your authentications CSS is loaded into the asset pipeline:</p></p>
 
 <p><figure class='code'><figcaption><span>app/assets/stylesheets/application.css.scss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="k">@import</span> <span class="s">&quot;authentications&quot;;</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span></span><span class="k">@import</span> <span class="s">&quot;authentications&quot;;</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>Include a link to social logins to your already logged in accounts:</p></p>
 
 <p><figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Social Accounts&quot;</span><span class="p">,</span> <span class="n">authentications_path</span> <span class="cp">%&gt;</span><span class="x"></span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span></span><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Social Accounts&quot;</span><span class="p">,</span> <span class="n">authentications_path</span> <span class="cp">%&gt;</span><span class="x"></span>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>Download some Facebook icons:</p></p>
 
 <p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -o app/assets/images/facebook_32.png <a href="https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png">https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png</a>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>curl -o app/assets/images/facebook_32.png <a href="https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png">https://www.evernote.com/shard/s1/sh/c3303305-ff8f-4829-a315-9ee91709f479/49b3985624af8fb0cae8e3223333c61a/deep/0/facebook_32.png</a>
 </span><span class='line'>cp app/assets/images/facebook_32.png app/assets/images/facebook_64.png
 </span></code></pre></td></tr></table></div></figure></p>
 
@@ -1172,7 +1172,7 @@ exercise to the reader!</p></p>
 <p><p>Issue a command to start your server:</p></p>
 
 <p><figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> foreman start
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>Since setting environment variables is important to the application running

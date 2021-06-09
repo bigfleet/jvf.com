@@ -143,7 +143,7 @@ commands:</p>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git commit -a -m <span class="s2">&quot;Saving my work, just in case&quot;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>git commit -a -m <span class="s2">&quot;Saving my work, just in case&quot;</span>
 </span><span class='line'>git checkout -b save-my-work
 </span><span class='line'>git branch -D master
 </span><span class='line'>git checkout -b master -t origin/master
@@ -154,7 +154,7 @@ commands:</p>
 working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b friend-graph-sidekiq
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>git checkout -b friend-graph-sidekiq
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -167,7 +167,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;koala&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.8.0rc1&quot;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="n">gem</span> <span class="s2">&quot;koala&quot;</span><span class="p">,</span> <span class="s2">&quot;~&gt; 1.8.0rc1&quot;</span>
 </span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sidekiq&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1"># add this in the test group</span>
@@ -220,7 +220,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <span class='line-number'>37</span>
 <span class='line-number'>38</span>
 <span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">describe</span> <span class="no">SocialConnection</span> <span class="k">do</span>
 </span><span class='line'>
@@ -250,7 +250,7 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 </span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;interface&quot;</span> <span class="k">do</span>
 </span><span class='line'>      <span class="n">subject</span><span class="p">{</span> <span class="no">FacebookInterface</span><span class="o">.</span><span class="n">for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should_not</span> <span class="n">be_nil</span><span class="p">}</span>
-</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should</span> <span class="n">be_a</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="p">)}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span><span class="n">should</span> <span class="n">be_a</span><span class="p">(</span><span class="no">FacebookInterface</span><span class="o">::</span><span class="no">StubInterface</span><span class="p">)}</span>
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">describe</span> <span class="s2">&quot;usage&quot;</span> <span class="k">do</span>
@@ -265,14 +265,14 @@ working!  It&rsquo;s easy!  Here&rsquo;s the branch I&rsquo;d start here:</p>
 <p>This will give you a spec to pass!  Run your specs with either:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>guard start -i
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> guard start -i
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>or</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>rake spec
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> rake spec
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -349,7 +349,7 @@ to the integration.</p>
 <span class='line-number'>48</span>
 <span class='line-number'>49</span>
 <span class='line-number'>50</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FacebookInterface</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="k">class</span> <span class="nc">FacebookInterface</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">StubInterface</span>
 </span><span class='line'>
@@ -398,7 +398,7 @@ to the integration.</p>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="no">FacebookInterface</span><span class="o">.</span><span class="n">stubs</span><span class="p">(</span><span class="ss">:for</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="ss">FacebookInterface</span><span class="p">:</span><span class="ss">:StubInterface</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="no">FacebookInterface</span><span class="o">.</span><span class="n">stubs</span><span class="p">(</span><span class="ss">:for</span><span class="p">)</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="no">FacebookInterface</span><span class="o">::</span><span class="no">StubInterface</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -406,8 +406,8 @@ to the integration.</p>
 
 <figure class='code'><figcaption><span>spec/support/sidekiq.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sidekiq/testing&#39;</span>
-</span><span class='line'><span class="ss">Sidekiq</span><span class="p">:</span><span class="ss">:Testing</span><span class="o">.</span><span class="n">fake!</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;sidekiq/testing&#39;</span>
+</span><span class='line'><span class="no">Sidekiq</span><span class="o">::</span><span class="no">Testing</span><span class="o">.</span><span class="n">fake!</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -461,7 +461,7 @@ to the integration.</p>
 <span class='line-number'>45</span>
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">describe</span> <span class="no">FacebookFriendWorker</span> <span class="k">do</span>
 </span><span class='line'>
@@ -533,7 +533,7 @@ of the request/response cycle.  We&rsquo;re most of the way to seeing this work!
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">context</span> <span class="s2">&quot;saving Facebook auths&quot;</span> <span class="k">do</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span> <span class="n">context</span> <span class="s2">&quot;saving Facebook auths&quot;</span> <span class="k">do</span>
 </span><span class='line'>   <span class="n">subject</span><span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:authentication</span><span class="p">)</span> <span class="p">}</span>
 </span><span class='line'>   <span class="n">it</span> <span class="s2">&quot;should enqueue a Facebook friend saver when saved&quot;</span> <span class="k">do</span>
 </span><span class='line'>     <span class="n">expect</span> <span class="p">{</span> <span class="n">subject</span><span class="o">.</span><span class="n">save</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="no">FacebookFriendWorker</span><span class="o">.</span><span class="n">jobs</span><span class="p">,</span> <span class="ss">:size</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -553,7 +553,7 @@ before we can actually <strong>run</strong> the code and have everything work.</
 <p>First, sidekiq requires redis, so let&rsquo;s install that.</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install redis
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>brew install redis
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -565,7 +565,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 
 <figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">redis</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span><span class="o">/</span><span class="n">redis</span><span class="o">.</span><span class="n">conf</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span></span><span class="ss">redis</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="n">config</span><span class="o">/</span><span class="n">redis</span><span class="o">.</span><span class="n">conf</span>
 </span><span class='line'><span class="ss">worker</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">sidekiq</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -573,7 +573,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 <h2>Step 6:</h2>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle <span class="nb">exec </span>foreman start
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span>bundle <span class="nb">exec</span> foreman start
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -582,7 +582,7 @@ need some configuration to run, so let&rsquo;s save <a href="https://gist.github
 <p>You should see something in your server window like:</p>
 
 <figure class='code'><figcaption><span>Terminal</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>11:15:52 worker.1 | 2013-11-03T16:15:52Z 60093 TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: <span class="k">done</span>: 4.197 sec
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span></span><span class="m">11</span>:15:52 worker.1 <span class="p">|</span> <span class="m">2013</span>-11-03T16:15:52Z <span class="m">60093</span> TID-ovijid2f0 FacebookFriendWorker JID-afefbf22f98c6c4f37a82132 INFO: <span class="k">done</span>: <span class="m">4</span>.197 sec
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -720,7 +720,7 @@ posted in
   <div class="container">
     <p class="pull-left">
   <a href="/">Hello, I'm Jim Van Fleet</a>
-  - Copyright &copy; 2015 - Jim Van Fleet
+  - Copyright &copy; 2021 - Jim Van Fleet
 </p>
 <p class="pull-right">
   <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
