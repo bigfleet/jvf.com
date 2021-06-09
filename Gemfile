@@ -3,7 +3,6 @@ source "https://rubygems.org"
 group :development do
   gem "rake", ">= 12.3.3"
   gem "jekyll", ">= 3.6.3"
-  gem 'rdiscount', '~> 2.0.7'
   gem 'pygments.rb'
   gem 'RedCloth', '~> 4.3.0'
   gem "haml", ">= 5.0.0"
@@ -22,6 +21,7 @@ group :development do
   gem "rack-protection", ">= 1.5.5"
   gem "yajl-ruby", ">= 1.3.1"
   gem "rack", ">= 2.1.4"
+  gem "jekyll-paginate"
 end
 
 gem 'sinatra'
