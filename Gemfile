@@ -1,12 +1,12 @@
 source "https://rubygems.org"
 
 group :development do
-  gem 'rake', '~> 0.9'
-  gem 'jekyll', '~> 0.12'
+  gem "rake", ">= 12.3.3"
+  gem 'jekyll'
   gem 'rdiscount', '~> 2.0.7'
-  gem 'pygments.rb', '~> 0.3.4'
-  gem 'RedCloth', '~> 4.2.9'
-  gem 'haml', '~> 3.1.7'
+  gem 'pygments.rb'
+  gem 'RedCloth', '~> 4.3.0'
+  gem "haml", ">= 5.0.0"
   gem 'compass', '~> 0.12.2'
   gem 'sass', '~> 3.2'
   gem 'sass-globbing', '~> 1.0.0'
@@ -18,6 +18,11 @@ group :development do
   gem 'jekyll-import'
   gem 'guard'
   gem 'guard-livereload'
+  gem "kramdown", ">= 2.3.0"
+  gem "nokogiri", ">= 1.11.4"
+  gem "rack-protection", ">= 1.5.5"
+  gem "yajl-ruby", ">= 1.3.1"
+  gem "rack", ">= 2.1.4"
 end
 
-gem 'sinatra', '~> 1.4.2'
+gem 'sinatra'
